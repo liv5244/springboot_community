@@ -43,22 +43,23 @@
 
         </div>
 
-        <div class="nav-item">
+        <div class="nav-item" th:if="${session.user == null}">
             <!--http://github.com/login/oauth/authorize?client_id=e16757cb7a1ecb7c8071&redirect_uri=http://localhost:8080/callback&scope=user&state=1-->
             <!--client_id:自己申请的OAuth应用的id，redirect_uri：回调的地址 scope： 要获取的用户信息  -->
-            <a class="nav-link btn-outline-success" href="http://github.com/login/oauth/authorize?client_id=e16757cb7a1ecb7c8071&redirect_uri=http://localhost:8080/callback&scope=user&state=1">登录</a>
+            <a class="nav-link btn-outline-success"
+               href="http://github.com/login/oauth/authorize?client_id=e16757cb7a1ecb7c8071&redirect_uri=http://localhost:8080/callback&scope=user&state=1">登录</a>
         </div>
 
-        <div class="nav-item dropdown">
+        <div class="nav-item dropdown" th:if="${session.user} != null">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-               aria-haspopup="true" aria-expanded="false">
-                我
+               aria-haspopup="true" aria-expanded="false" th:text="${session.user.getLogin()}">
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="#"></a>
-                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">我的信息</a>
+                <a class="dropdown-item" href="#">MyInfo</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">我的主页</a>
             </div>
         </div>
     </div>
