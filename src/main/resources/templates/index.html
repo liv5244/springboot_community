@@ -52,7 +52,7 @@
 
         <div class="nav-item dropdown" th:if="${session.user} != null">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-               aria-haspopup="true" aria-expanded="false" th:text="${session.user.getLogin()}">
+               aria-haspopup="true" aria-expanded="false" th:text="${session.user.name}">
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="#"></a>
