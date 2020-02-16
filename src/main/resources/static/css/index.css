@@ -1,3 +1,31 @@
-.search-input {
-     width: 150px;
+body {
+    background-image: url("../images/bg.jpg");
+}
+
+.main {
+    padding: 25px;
+    margin-top: 20px;
+    background: white;
+}
+
+.info_span {
+    font-size: 12px;
+    font-weight: normal;
+    color: #999;
+}
+
+.media-body a:hover {
+    text-decoration: none;
+    color: #499ef3;
+}
+
+.media-body a:active, a:hover {
+    outline: 0;
+}
+
+.media-body a {
+    cursor: pointer;
+    color: #155faa;
+    text-decoration: none;
+    background: 0 0;
 }

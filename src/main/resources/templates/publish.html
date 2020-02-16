@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>论坛</title>
+    <link rel="stylesheet" th:href="@{webjars/bootstrap/4.4.1/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{static/css/index.css}">
+    <link rel="stylesheet" th:href="@{static/css/publish.css}">
+    <link rel="shortcut icon" th:href="@{static/images/favicon.ico}" type="image/x-icon"/>
+
+    <script type="application/javascript" th:src="@{webjars/jquery/3.4.1/jquery.js}"></script>
+    <script type="application/javascript" th:src="@{webjars/bootstrap/4.4.1/js/bootstrap.js}"></script>
+
+</head>
+<body>
+<div th:replace="common/nav::nav"></div>
+
+<div class="container main">
+    <div class="row">
+        <div class="col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12">
+            <form action="/question" method="post">
+                <h2>
+                    <svg class="bi bi-text-indent-left" width="1em" height="1em" viewBox="0 0 20 20" fill="currentColor"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                              d="M4 5.5a.5.5 0 01.5-.5h11a.5.5 0 010 1h-11a.5.5 0 01-.5-.5zm.646 2.146a.5.5 0 01.708 0l2 2a.5.5 0 010 .708l-2 2a.5.5 0 01-.708-.708L6.293 10 4.646 8.354a.5.5 0 010-.708zM9 8.5a.5.5 0 01.5-.5h6a.5.5 0 010 1h-6a.5.5 0 01-.5-.5zm0 3a.5.5 0 01.5-.5h6a.5.5 0 010 1h-6a.5.5 0 01-.5-.5zm-5 3a.5.5 0 01.5-.5h11a.5.5 0 010 1h-11a.5.5 0 01-.5-.5z"
+                              clip-rule="evenodd"></path>
+                    </svg>
+                    发布:
+                </h2>
+                <div class="form-group">
+                    <h5><label for="title">标题（简单扼要）：</label></h5>
+                    <input type="text" class="form-control" id="title" name="title" placeholder="问题标题.....">
+                </div>
+                <div class="form-group">
+                    <h5><label for="content">问题补充（必填，参看右侧提示）：</label></h5>
+                    <textarea class="form-control" id="content" rows="18" name="content"></textarea>
+                </div>
+                <div class="form-group">
+                    <h5><label for="tag">添加标签：</label></h5>
+                    <input type="text" class="form-control" id="tag" name="tag" placeholder="标签按照 , 分隔开">
+                </div>
+                <h5><label for="tag">选择文件：</label></h5>
+                <div class="form-group custom-file">
+                    <input type="file" class="custom-file-input" id="uploadFile" name="files">
+                    <label class="custom-file-label" for="uploadFile">Choose file</label>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-success " id="release">发布</button>
+                </div>
+            </form>
+
+        </div>
+        <div class="col-xl-3 col-lg-12 col-md-12 col-sm-12 col-12 tips">
+            <h3>问题发起指南:</h3>
+            <ol>
+                <li>问题标题：请用精简的语言描述您发布的问题，不超过25字。</li>
+                <li>问题补充：详细补充您的问题内容，并确保问题描述清晰直观，并提供一些相关资料。</li>
+                <li>选择标签：选择一个或者多个合适的标签，用逗号分隔开，每个标签不超过10个字。</li>
+            </ol>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#release").click(function () {
+            title = $("#title").val();
+            content = $("#content").val();
+            tag = $("#tag").val();
+            $.ajax({
+                url: "/question",
+                type: "POST",
+                data: {"title": title, "content": content, "tag": tag},
+                success: function (res) {
+                    console.log(res);
+                }
+            });
+        });
+    })
+</script>
+</body>
+</html>

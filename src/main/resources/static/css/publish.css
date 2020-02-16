@@ -1,0 +1,17 @@
+#release {
+    margin: 20px;
+}
+.main {
+    padding: 25px;
+    margin-top: 20px;
+    background: white;
+}
+body {
+    background-image: url("../images/bg.jpg");
+}
+.tips h3 {
+     margin-bottom: 25px;
+ }
+.tips ol {
+    padding-left: 20px;
+}
