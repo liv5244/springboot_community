@@ -39,3 +39,13 @@ body {
 .bi-list-task {
     margin-top: -5px;
 }
+
+.left_cont {
+    border-right-color: rgba(0, 0, 0, 0.125);
+    border-right-style: solid;
+    border-right-width: 1px;
+}
+
+.right_bar {
+    margin-top:50px;
+}

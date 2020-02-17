@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itliv.community.mapper.HomePageMapper">
+    <resultMap id="QuestionWithUser" type="com.itliv.community.model.Question">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <result column="creator" property="creator"/>
+        <result column="comment_count" property="commentCount"/>
+        <result column="view_count" property="viewCount"/>
+        <result column="like_count" property="likeCount"/>
+        <result column="collect_count" property="collectCount"/>
+        <result column="tag" property="tag"/>
+        <association property="user" javaType="com.itliv.community.model.User">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+            <result column="account_id" property="accountId"/>
+            <result column="token" property="token"/>
+            <result column="gmt_create" property="gmtCreate"/>
+            <result column="gmt_modified" property="gmtModified"/>
+            <result column="avatar_url" property="avatarUrl"/>
+        </association>
+    </resultMap>
+    <select id="findMyQuesByIdForPage" resultMap="QuestionWithUser">
+        select q.*,u.*
+        from question q
+                 left join user u on q.creator = u.id
+        where creator = #{creator}
+        order by q.`gmt_create` DESC
+    </select>
+</mapper>

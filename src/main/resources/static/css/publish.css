@@ -15,3 +15,8 @@ body {
 .tips ol {
     padding-left: 20px;
 }
+
+.bi-text-indent-left {
+    margin-top: -5px;
+}
+

@@ -1,3 +1,6 @@
 .search_input {
     width: 300px;
 }
+#navs a {
+    border:none;
+}

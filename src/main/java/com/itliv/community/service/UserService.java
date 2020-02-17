@@ -11,6 +11,10 @@ public interface UserService {
      */
     void insertUser(User user);
 
+    User findUserbyAccountId(String accountId);
+
+    void updateUser(User user);
+
     /**
      * 根据token查找用户
      * @param token

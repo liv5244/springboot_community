@@ -1,24 +1,27 @@
-package com.itliv.community.utils;
+package com.itliv.community.config.interceptor;
 
 import com.itliv.community.model.User;
 import com.itliv.community.service.impl.UserServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-/**
- * 用户的处理工具
- */
 @Component
-public class UserUtils {
+@Slf4j
+public class LoginInterceptor implements HandlerInterceptor {
 
     @Autowired
     UserServiceImpl userService;
 
-    public User checkCookieAndReturnUser(HttpServletRequest request) {
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         Cookie[] cookies = request.getCookies();
         User user = null;
         if (cookies != null) {
@@ -31,11 +34,23 @@ public class UserUtils {
                     if (users != null && users.size() == 1) {
                         user = users.get(0);
                         request.getSession().setAttribute("user", user);
+                        log.info("user为：" + user + "尝试登陆");
+                        return true;
                     }
-                    break;
                 }
             }
         }
-        return user;
+//        request.getRequestDispatcher("/info").forward(request, response);
+        return true;
+    }
+
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+
     }
 }

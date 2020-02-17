@@ -50,14 +50,28 @@ public class UserServiceImpl implements UserService {
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
         GithubUser githubUser = githubProvider.getUser(accessToken);
         if (githubUser != null) {
-            User user = new User();
+            //判断数据库中是否已经存在了登陆记录，如果存在登陆记录，直接判断token
+            //否则应该存入数据库，并且更新用户信息
+            String accountId = String.valueOf(githubUser.getId());
+            User user = findUserbyAccountId(accountId);
             String token = UUID.randomUUID().toString();
-            user.setToken(token);
-            user.setAccountId(String.valueOf(githubUser.getId()));
-            user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModified(user.getGmtCreate());
-            user.setName(githubUser.getLogin());
-            insertUser(user);
+            if (user == null) {
+                user = new User();
+                user.setToken(token);
+                user.setGmtModified(System.currentTimeMillis());
+                user.setName(githubUser.getLogin());
+                user.setAvatarUrl(githubUser.getAvatarUrl());
+                user.setAccountId(accountId);
+                user.setGmtCreate(System.currentTimeMillis());
+                insertUser(user);
+            } else {
+                user.setToken(token);
+                user.setGmtModified(System.currentTimeMillis());
+                user.setName(githubUser.getLogin());
+                user.setAvatarUrl(githubUser.getAvatarUrl());
+                updateUser(user);
+            }
+
             log.info("登陆成功，login user：" + user);
             return token;
         }
@@ -65,8 +79,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User findUserbyAccountId(String accountId) {
+        return userMapper.findUserByAccountId(accountId);
+    }
+
+    @Override
+    public void updateUser(User user) {
+        System.out.println("更新了用户的下列信息:" + user);
+        userMapper.updateUser(user);
+    }
+
+    @Override
     public List<User> findUserByToken(String token) {
-        log.info("service 中的findUserByToken 执行了...");
         List<User> users = userMapper.findUserByToken(token);
         return users;
     }

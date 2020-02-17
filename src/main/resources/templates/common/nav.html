@@ -14,7 +14,7 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color: #e3f2fd;" th:fragment="nav">
     <div class="container">
-        <a class="navbar-brand" href="/">
+        <a class="navbar-brand" href="/index">
             <img th:src="@{static/images/icon.jpg}" width="30" height="30" class="d-inline-block align-top" alt="">
         </a>
         <form class="form-inline my-2 my-lg-0">
@@ -32,7 +32,7 @@
             <ul class="navbar-nav mr-auto">
 
                 <li class="nav-item active">
-                    <a class="nav-link" href="/">主页 <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/index">主页 <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Link1</a>
@@ -56,14 +56,26 @@
                aria-haspopup="true" aria-expanded="false" th:text="${session.user.name}">
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="#"></a>
-                <a class="dropdown-item" href="#">我的信息</a>
+                <a class="dropdown-item" href="/homepage">我的主页</a>
                 <a class="dropdown-item" href="#">MyInfo</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="/publish">发起提问</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/logout">退出登陆</a>
             </div>
         </div>
     </div>
 </nav>
+
+<!--抽取主页的右侧的navs-->
+
+<div class="list-group" id="navs">
+    <a href="#" class="list-group-item list-group-item-action active" style="border: none;">
+        我提出的问题
+    </a>
+    <a href="#" class="list-group-item list-group-item-action" style="border: none;">我关注的问题</a>
+    <a href="#" class="list-group-item list-group-item-action"style="border: none;">我的草稿</a>
+    <a href="#" class="list-group-item list-group-item-action" style="border: none;">我的收藏</a>
+</div>
 </body>
 </html>

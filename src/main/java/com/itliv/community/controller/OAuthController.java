@@ -18,6 +18,13 @@ public class OAuthController {
     @Autowired
     private UserServiceImpl userService;
 
+    /**
+     * 调用github登陆接口的回调
+     * @param code
+     * @param state
+     * @param response
+     * @return
+     */
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
                            @RequestParam(name = "state") String state,
@@ -26,9 +33,9 @@ public class OAuthController {
         if (token != null) {
             //写入cookie和sesion
             response.addCookie(new Cookie("token", token));
-            return "redirect:/";
+            return "redirect:/index";
         } else {
-            return "redirect:/";
+            return "redirect:/index";
         }
     }
 }

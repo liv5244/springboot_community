@@ -18,7 +18,7 @@
 <div class="container main">
     <div class="row">
         <div class="col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12">
-            <form action="/question" method="post">
+            <form action="/publish" method="post">
                 <h2>
                     <svg class="bi bi-text-indent-left" width="1em" height="1em" viewBox="0 0 20 20" fill="currentColor"
                          xmlns="http://www.w3.org/2000/svg">
@@ -70,7 +70,7 @@
             content = $("#content").val();
             tag = $("#tag").val();
             $.ajax({
-                url: "/question",
+                url: "/publish",
                 type: "POST",
                 data: {"title": title, "content": content, "tag": tag},
                 success: function (res) {

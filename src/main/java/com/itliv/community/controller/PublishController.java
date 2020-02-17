@@ -5,7 +5,6 @@ import com.itliv.community.model.User;
 import com.itliv.community.service.impl.QuestionServiceImpl;
 import com.itliv.community.service.impl.UserServiceImpl;
 import com.itliv.community.utils.Msg;
-import com.itliv.community.utils.UserUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,14 +24,11 @@ public class PublishController {
     @Autowired
     QuestionServiceImpl questionService;
 
-    @Autowired
-    UserUtils userUtils;
-
     private User user;
 
     @GetMapping("/publish")
     public String publish(HttpServletRequest request) {
-        user = userUtils.checkCookieAndReturnUser(request);
+        user = (User) request.getSession().getAttribute("user");
         if (user != null) {
             Date now = new Date();
             log.info(user.getName() + "在时间：" + now +
@@ -41,7 +37,7 @@ public class PublishController {
         return "publish";
     }
 
-    @PostMapping("/question")
+    @PostMapping("/publish")
     @ResponseBody
     public Msg sendQuestion(HttpServletRequest request) {
         String title = request.getParameter("title");
