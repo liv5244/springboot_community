@@ -3,6 +3,7 @@ package com.itliv.community.controller;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
+import com.itliv.community.dto.QuestionDTO;
 import com.itliv.community.model.Question;
 import com.itliv.community.model.User;
 import com.itliv.community.service.QuestionService;
@@ -28,8 +29,8 @@ public class HomePageController {
                              HttpServletRequest request,
                              Model model) {
         User user = (User) request.getSession().getAttribute("user");
-        Page<Question> lists = questionService.findMyQuesByIdForPage(page, 10, user.getId());
-        PageInfo<Question> pageInfo = new PageInfo<>(lists);
+        Page<QuestionDTO> lists = questionService.findMyQuesByIdForPage(page, 10, user.getId());
+        PageInfo<QuestionDTO> pageInfo = new PageInfo<>(lists);
         log.info("pageInfo:" + JSON.toJSONString(pageInfo));
         model.addAttribute("lists", pageInfo);
         return "homepage";

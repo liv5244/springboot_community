@@ -1,19 +1,12 @@
-package com.itliv.community.model;
+package com.itliv.community.dto;
+
+import com.itliv.community.model.User;
+import lombok.Data;
 
 import java.io.Serializable;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-/**
- * question
- * @author 
- */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class Question implements Serializable {
+public class QuestionDTO implements Serializable {
     private Integer id;
 
     private String title;
@@ -35,6 +28,8 @@ public class Question implements Serializable {
     private Integer collectCount;
 
     private String tag;
+
+    private User user;
 
     private static final long serialVersionUID = 1L;
 }

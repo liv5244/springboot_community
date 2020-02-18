@@ -16,11 +16,11 @@ class SpringbootCommunityApplicationTests {
     void contextLoads() {
         User  user = new User();
         user.setAccountId("111111");
-        user.setGmtCreate(123L);
-        user.setGmtModified(456L);
+        user.setGmtCreate(String.valueOf(123L));
+        user.setGmtModified(String.valueOf(456L));
         user.setName("liwei");
         user.setToken("asdf2131");
-        userMapper.insertUser(user);
+        userMapper.insert(user);
     }
 
 }

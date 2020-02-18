@@ -1,5 +1,6 @@
 package com.itliv.community.controller;
 
+import com.itliv.community.dto.QuestionDTO;
 import com.itliv.community.model.Question;
 import com.itliv.community.service.impl.QuestionServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ public class QuestionControlller {
 
     @RequestMapping("/info/{id}")
     public String showQues(@PathVariable("id") int id, Model model) {
-        Question question = questionService.findQuesById(id);
+        QuestionDTO question = questionService.findQuesById(id);
         model.addAttribute("ques", question);
         return "question";
     }

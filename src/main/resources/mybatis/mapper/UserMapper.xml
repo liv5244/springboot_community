@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itliv.community.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="com.itliv.community.model.User">
+    <id column="user_id" jdbcType="INTEGER" property="id" />
+    <result column="user_name" jdbcType="VARCHAR" property="name" />
+    <result column="user_account_id" jdbcType="VARCHAR" property="accountId" />
+    <result column="user_avatar_url" jdbcType="VARCHAR" property="avatarUrl" />
+    <result column="user_token" jdbcType="CHAR" property="token" />
+    <result column="user_gmt_create" jdbcType="VARCHAR" property="gmtCreate" />
+    <result column="user_gmt_modified" jdbcType="VARCHAR" property="gmtModified" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    user.id as user_id, user.`name` as `user_name`, user.account_id as user_account_id, 
+    user.avatar_url as user_avatar_url, user.token as user_token, user.gmt_create as user_gmt_create, 
+    user.gmt_modified as user_gmt_modified
+  </sql>
+
+  <select id="findUserByToken" resultType="com.itliv.community.model.User">
+    select * from user where token = #{token}
+  </select>
+
+  <select id="findUserByAccountId" resultType="com.itliv.community.model.User">
+    select * from user where account_id = #{accountId}
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user user
+    where user.id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itliv.community.model.User" useGeneratedKeys="true">
+    insert into user (`name`, account_id, avatar_url, 
+      token, gmt_create, gmt_modified
+      )
+    values (#{name,jdbcType=VARCHAR}, #{accountId,jdbcType=VARCHAR}, #{avatarUrl,jdbcType=VARCHAR}, 
+      #{token,jdbcType=CHAR}, #{gmtCreate,jdbcType=VARCHAR}, #{gmtModified,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itliv.community.model.User" useGeneratedKeys="true">
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="accountId != null">
+        account_id,
+      </if>
+      <if test="avatarUrl != null">
+        avatar_url,
+      </if>
+      <if test="token != null">
+        token,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="accountId != null">
+        #{accountId,jdbcType=VARCHAR},
+      </if>
+      <if test="avatarUrl != null">
+        #{avatarUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="token != null">
+        #{token,jdbcType=CHAR},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.itliv.community.model.User">
+    update user
+    <set>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="accountId != null">
+        account_id = #{accountId,jdbcType=VARCHAR},
+      </if>
+      <if test="avatarUrl != null">
+        avatar_url = #{avatarUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="token != null">
+        token = #{token,jdbcType=CHAR},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.itliv.community.model.User">
+    update user
+    set `name` = #{name,jdbcType=VARCHAR},
+      account_id = #{accountId,jdbcType=VARCHAR},
+      avatar_url = #{avatarUrl,jdbcType=VARCHAR},
+      token = #{token,jdbcType=CHAR},
+      gmt_create = #{gmtCreate,jdbcType=VARCHAR},
+      gmt_modified = #{gmtModified,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void insertUser(User user) {
         log.info("serviceImpl执行了，并且得到user为" + user);
-        userMapper.insertUser(user);
+        userMapper.insertSelective(user);
     }
 
     /**
@@ -58,15 +58,15 @@ public class UserServiceImpl implements UserService {
             if (user == null) {
                 user = new User();
                 user.setToken(token);
-                user.setGmtModified(System.currentTimeMillis());
+                user.setGmtModified(String.valueOf(System.currentTimeMillis()));
                 user.setName(githubUser.getLogin());
                 user.setAvatarUrl(githubUser.getAvatarUrl());
                 user.setAccountId(accountId);
-                user.setGmtCreate(System.currentTimeMillis());
+                user.setGmtCreate(String.valueOf(System.currentTimeMillis()));
                 insertUser(user);
             } else {
                 user.setToken(token);
-                user.setGmtModified(System.currentTimeMillis());
+                user.setGmtModified(String.valueOf(System.currentTimeMillis()));
                 user.setName(githubUser.getLogin());
                 user.setAvatarUrl(githubUser.getAvatarUrl());
                 updateUser(user);
@@ -86,12 +86,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUser(User user) {
         System.out.println("更新了用户的下列信息:" + user);
-        userMapper.updateUser(user);
+        System.out.println(user);
+        userMapper.updateByPrimaryKey(user);
     }
 
     @Override
     public List<User> findUserByToken(String token) {
         List<User> users = userMapper.findUserByToken(token);
+        log.info("findByToken:"+token);
         return users;
     }
 }

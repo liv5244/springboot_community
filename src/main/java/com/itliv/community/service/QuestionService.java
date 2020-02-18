@@ -1,6 +1,7 @@
 package com.itliv.community.service;
 
 import com.github.pagehelper.Page;
+import com.itliv.community.dto.QuestionDTO;
 import com.itliv.community.model.Question;
 
 import java.util.List;
@@ -16,14 +17,14 @@ public interface QuestionService {
      * 查找questions并且携带user信息（多表查询）
      * @return
      */
-    public Page<Question> findQuesWithUserByPage(int pageNum, int pageSize);
+    public Page<QuestionDTO> findQuesWithUserByPage(int pageNum, int pageSize);
 
-    Page<Question> findMyQuesByIdForPage(int pageNum, int pageSize, int creator);
+    Page<QuestionDTO> findMyQuesByIdForPage(int pageNum, int pageSize, int creator);
 
     /**
      * 根据id查询Ques
      * @param id
      * @return
      */
-    Question findQuesById(int id);
+    QuestionDTO findQuesById(int id);
 }

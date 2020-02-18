@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace=".base.UserBaseMapper">
+
+
+    <insert id="insertUser"  useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `user`
+        (
+        <trim suffixOverrides=",">
+                    <if test="id!=null">
+                        `id`,
+                    </if>
+                    <if test="name!=null">
+                        `name`,
+                    </if>
+                    <if test="accountId!=null">
+                        `account_id`,
+                    </if>
+                    <if test="avatarUrl!=null">
+                        `avatar_url`,
+                    </if>
+                    <if test="token!=null">
+                        `token`,
+                    </if>
+                    <if test="gmtCreate!=null">
+                        `gmt_create`,
+                    </if>
+                    <if test="gmtModified!=null">
+                        `gmt_modified`,
+                    </if>
+        </trim>
+        )
+        VALUES
+        (
+        <trim suffixOverrides=",">
+                <if test="id!=null">
+                    #{id},
+                </if>
+                <if test="name!=null">
+                    #{name},
+                </if>
+                <if test="accountId!=null">
+                    #{accountId},
+                </if>
+                <if test="avatarUrl!=null">
+                    #{avatarUrl},
+                </if>
+                <if test="token!=null">
+                    #{token},
+                </if>
+                <if test="gmtCreate!=null">
+                    #{gmtCreate},
+                </if>
+                <if test="gmtModified!=null">
+                    #{gmtModified},
+                </if>
+        </trim>
+        )
+    </insert>
+
+
+
+
+    <update id="updateUser">
+        UPDATE `user`
+        SET
+        <trim suffixOverrides=",">
+            <if test="name != null and name!=''">
+                `name` = #{name},
+            </if>
+            <if test="accountId != null and accountId!=''">
+                `account_id` = #{accountId},
+            </if>
+            <if test="avatarUrl != null and avatarUrl!=''">
+                `avatar_url` = #{avatarUrl},
+            </if>
+            <if test="token != null and token!=''">
+                `token` = #{token},
+            </if>
+            <if test="gmtCreate != null and gmtCreate!=''">
+                `gmt_create` = #{gmtCreate},
+            </if>
+            <if test="gmtModified != null and gmtModified!=''">
+                `gmt_modified` = #{gmtModified},
+            </if>
+        </trim>
+        WHERE
+        <trim suffixOverrides="and">
+                `id` = #{id} and
+        </trim>
+    </update>
+
+
+
+    <resultMap type=".User" id="UserMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="accountId" column="account_id"/>
+        <result property="avatarUrl" column="avatar_url"/>
+        <result property="token" column="token"/>
+        <result property="gmtCreate" column="gmt_create"/>
+        <result property="gmtModified" column="gmt_modified"/>
+    </resultMap>
+
+
+    <select id="queryUser" resultMap="UserMap">
+        select
+        <include refid="baseResult"></include>
+        from  `user`
+        <trim prefix="where" suffixOverrides="and | or">
+            <if test="id != null">
+                `id` = #{id} and
+            </if>
+            <if test="name != null and name!=''">
+                `name` = #{name} and
+            </if>
+            <if test="accountId != null and accountId!=''">
+                `account_id` = #{accountId} and
+            </if>
+            <if test="avatarUrl != null and avatarUrl!=''">
+                `avatar_url` = #{avatarUrl} and
+            </if>
+            <if test="token != null and token!=''">
+                `token` = #{token} and
+            </if>
+            <if test="gmtCreate != null and gmtCreate!=''">
+                `gmt_create` = #{gmtCreate} and
+            </if>
+            <if test="gmtModified != null and gmtModified!=''">
+                `gmt_modified` = #{gmtModified} and
+            </if>
+            <if test = "(_parameter instanceof .User$QueryBuilder) == true">
+                <if test="idList != null">
+                    `id` in
+                    <foreach collection="idList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+                <if test="idSt !=null">
+                    `id` >= #{idSt} and
+                </if>
+                <if test="idEd!=null">
+                    `id` &lt;= #{idEd} and
+                </if>
+                <if test="nameList != null">
+                    `name` in
+                    <foreach collection="nameList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+                <if test ="fuzzyName!=null and fuzzyName.size()>0">
+                    (
+                    <foreach collection="fuzzyName"  separator="or" item="item">
+                        `Name` like concat('%',#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test ="rightFuzzyName!=null and rightFuzzyName.size()>0">
+                    (
+                    <foreach collection="rightFuzzyName"  separator="or" item="item">
+                        `Name` like concat(#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test="accountIdList != null">
+                    `account_id` in
+                    <foreach collection="accountIdList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+                <if test ="fuzzyAccountId!=null and fuzzyAccountId.size()>0">
+                    (
+                    <foreach collection="fuzzyAccountId"  separator="or" item="item">
+                        `Account_id` like concat('%',#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test ="rightFuzzyAccountId!=null and rightFuzzyAccountId.size()>0">
+                    (
+                    <foreach collection="rightFuzzyAccountId"  separator="or" item="item">
+                        `Account_id` like concat(#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test="avatarUrlList != null">
+                    `avatar_url` in
+                    <foreach collection="avatarUrlList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+                <if test ="fuzzyAvatarUrl!=null and fuzzyAvatarUrl.size()>0">
+                    (
+                    <foreach collection="fuzzyAvatarUrl"  separator="or" item="item">
+                        `Avatar_url` like concat('%',#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test ="rightFuzzyAvatarUrl!=null and rightFuzzyAvatarUrl.size()>0">
+                    (
+                    <foreach collection="rightFuzzyAvatarUrl"  separator="or" item="item">
+                        `Avatar_url` like concat(#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test="tokenList != null">
+                    `token` in
+                    <foreach collection="tokenList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+                <if test ="fuzzyToken!=null and fuzzyToken.size()>0">
+                    (
+                    <foreach collection="fuzzyToken"  separator="or" item="item">
+                        `Token` like concat('%',#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test ="rightFuzzyToken!=null and rightFuzzyToken.size()>0">
+                    (
+                    <foreach collection="rightFuzzyToken"  separator="or" item="item">
+                        `Token` like concat(#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test="gmtCreateList != null">
+                    `gmt_create` in
+                    <foreach collection="gmtCreateList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+                <if test ="fuzzyGmtCreate!=null and fuzzyGmtCreate.size()>0">
+                    (
+                    <foreach collection="fuzzyGmtCreate"  separator="or" item="item">
+                        `Gmt_create` like concat('%',#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test ="rightFuzzyGmtCreate!=null and rightFuzzyGmtCreate.size()>0">
+                    (
+                    <foreach collection="rightFuzzyGmtCreate"  separator="or" item="item">
+                        `Gmt_create` like concat(#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test="gmtModifiedList != null">
+                    `gmt_modified` in
+                    <foreach collection="gmtModifiedList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+                <if test ="fuzzyGmtModified!=null and fuzzyGmtModified.size()>0">
+                    (
+                    <foreach collection="fuzzyGmtModified"  separator="or" item="item">
+                        `Gmt_modified` like concat('%',#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test ="rightFuzzyGmtModified!=null and rightFuzzyGmtModified.size()>0">
+                    (
+                    <foreach collection="rightFuzzyGmtModified"  separator="or" item="item">
+                        `Gmt_modified` like concat(#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+            </if>
+        </trim>
+    </select>
+
+    <select id="queryUserLimit1" resultMap="UserMap">
+        select
+        <include refid="baseResult"></include>
+        from  `user`
+        <trim prefix="where" suffixOverrides="and | or">
+            <if test="id != null">
+                `id` = #{id} and
+            </if>
+            <if test="name != null and name!=''">
+                `name` = #{name} and
+            </if>
+            <if test="accountId != null and accountId!=''">
+                `account_id` = #{accountId} and
+            </if>
+            <if test="avatarUrl != null and avatarUrl!=''">
+                `avatar_url` = #{avatarUrl} and
+            </if>
+            <if test="token != null and token!=''">
+                `token` = #{token} and
+            </if>
+            <if test="gmtCreate != null and gmtCreate!=''">
+                `gmt_create` = #{gmtCreate} and
+            </if>
+            <if test="gmtModified != null and gmtModified!=''">
+                `gmt_modified` = #{gmtModified} and
+            </if>
+            <if test = "(_parameter instanceof .User$QueryBuilder) == true">
+                    <if test="idList != null">
+                        `id` in
+                        <foreach collection="idList" close=")" open="(" separator="," item="item">
+                            #{item}
+                        </foreach> and
+                    </if>
+                <if test="idSt !=null">
+                    `id` >= #{idSt} and
+                </if>
+                <if test="idEd!=null">
+                    `id` &lt;= #{idEd} and
+                </if>
+                    <if test="nameList != null">
+                        `name` in
+                        <foreach collection="nameList" close=")" open="(" separator="," item="item">
+                            #{item}
+                        </foreach> and
+                    </if>
+                <if test ="fuzzyName!=null and fuzzyName.size()>0">
+                    (
+                    <foreach collection="fuzzyName"  separator="or" item="item">
+                        `Name` like concat('%',#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test ="rightFuzzyName!=null and rightFuzzyName.size()>0">
+                    (
+                    <foreach collection="rightFuzzyName"  separator="or" item="item">
+                        `Name` like concat(#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                    <if test="accountIdList != null">
+                        `account_id` in
+                        <foreach collection="accountIdList" close=")" open="(" separator="," item="item">
+                            #{item}
+                        </foreach> and
+                    </if>
+                <if test ="fuzzyAccountId!=null and fuzzyAccountId.size()>0">
+                    (
+                    <foreach collection="fuzzyAccountId"  separator="or" item="item">
+                        `Account_id` like concat('%',#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test ="rightFuzzyAccountId!=null and rightFuzzyAccountId.size()>0">
+                    (
+                    <foreach collection="rightFuzzyAccountId"  separator="or" item="item">
+                        `Account_id` like concat(#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                    <if test="avatarUrlList != null">
+                        `avatar_url` in
+                        <foreach collection="avatarUrlList" close=")" open="(" separator="," item="item">
+                            #{item}
+                        </foreach> and
+                    </if>
+                <if test ="fuzzyAvatarUrl!=null and fuzzyAvatarUrl.size()>0">
+                    (
+                    <foreach collection="fuzzyAvatarUrl"  separator="or" item="item">
+                        `Avatar_url` like concat('%',#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test ="rightFuzzyAvatarUrl!=null and rightFuzzyAvatarUrl.size()>0">
+                    (
+                    <foreach collection="rightFuzzyAvatarUrl"  separator="or" item="item">
+                        `Avatar_url` like concat(#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                    <if test="tokenList != null">
+                        `token` in
+                        <foreach collection="tokenList" close=")" open="(" separator="," item="item">
+                            #{item}
+                        </foreach> and
+                    </if>
+                <if test ="fuzzyToken!=null and fuzzyToken.size()>0">
+                    (
+                    <foreach collection="fuzzyToken"  separator="or" item="item">
+                        `Token` like concat('%',#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test ="rightFuzzyToken!=null and rightFuzzyToken.size()>0">
+                    (
+                    <foreach collection="rightFuzzyToken"  separator="or" item="item">
+                        `Token` like concat(#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                    <if test="gmtCreateList != null">
+                        `gmt_create` in
+                        <foreach collection="gmtCreateList" close=")" open="(" separator="," item="item">
+                            #{item}
+                        </foreach> and
+                    </if>
+                <if test ="fuzzyGmtCreate!=null and fuzzyGmtCreate.size()>0">
+                    (
+                    <foreach collection="fuzzyGmtCreate"  separator="or" item="item">
+                        `Gmt_create` like concat('%',#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test ="rightFuzzyGmtCreate!=null and rightFuzzyGmtCreate.size()>0">
+                    (
+                    <foreach collection="rightFuzzyGmtCreate"  separator="or" item="item">
+                        `Gmt_create` like concat(#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                    <if test="gmtModifiedList != null">
+                        `gmt_modified` in
+                        <foreach collection="gmtModifiedList" close=")" open="(" separator="," item="item">
+                            #{item}
+                        </foreach> and
+                    </if>
+                <if test ="fuzzyGmtModified!=null and fuzzyGmtModified.size()>0">
+                    (
+                    <foreach collection="fuzzyGmtModified"  separator="or" item="item">
+                        `Gmt_modified` like concat('%',#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test ="rightFuzzyGmtModified!=null and rightFuzzyGmtModified.size()>0">
+                    (
+                    <foreach collection="rightFuzzyGmtModified"  separator="or" item="item">
+                        `Gmt_modified` like concat(#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+            </if>
+        </trim>
+        limit 1
+    </select>
+
+    <sql id="baseResult">
+        <trim suffixOverrides=",">
+            <if test = "(_parameter instanceof .User$QueryBuilder) == true">
+
+                <if test="fetchFields==null">
+                    *,
+                </if>
+                <if test="fetchFields!=null">
+                    <if test="fetchFields.AllFields !=null">
+                        *,
+                    </if>
+                    <if test="fetchFields.AllFields ==null and fetchFields.fetchFields==null and fetchFields.excludeFields==null and fetchFields.otherFields==null">
+                        *,
+                    </if>
+                    <if test="fetchFields.AllFields==null and fetchFields.fetchFields!=null">
+                    <if test="fetchFields.fetchFields.id==true">
+                        `id`,
+                    </if>
+                    <if test="fetchFields.fetchFields.name==true">
+                        `name`,
+                    </if>
+                    <if test="fetchFields.fetchFields.accountId==true">
+                        `account_id`,
+                    </if>
+                    <if test="fetchFields.fetchFields.avatarUrl==true">
+                        `avatar_url`,
+                    </if>
+                    <if test="fetchFields.fetchFields.token==true">
+                        `token`,
+                    </if>
+                    <if test="fetchFields.fetchFields.gmtCreate==true">
+                        `gmt_create`,
+                    </if>
+                    <if test="fetchFields.fetchFields.gmtModified==true">
+                        `gmt_modified`,
+                    </if>
+                    </if>
+                    <if test="fetchFields.AllFields==null and fetchFields.excludeFields!=null">
+                    <if test="fetchFields.excludeFields.id==null">
+                        `id`,
+                    </if>
+                    <if test="fetchFields.excludeFields.name==null">
+                        `name`,
+                    </if>
+                    <if test="fetchFields.excludeFields.accountId==null">
+                        `account_id`,
+                    </if>
+                    <if test="fetchFields.excludeFields.avatarUrl==null">
+                        `avatar_url`,
+                    </if>
+                    <if test="fetchFields.excludeFields.token==null">
+                        `token`,
+                    </if>
+                    <if test="fetchFields.excludeFields.gmtCreate==null">
+                        `gmt_create`,
+                    </if>
+                    <if test="fetchFields.excludeFields.gmtModified==null">
+                        `gmt_modified`,
+                    </if>
+                    </if>
+                    <if test="fetchFields.otherFields!=null and fetchFields.otherFields.size>0">
+                        <foreach collection="fetchFields.otherFields" index="index" item="item" separator=",">
+                        `#{item}`
+                        </foreach>
+                    </if>
+                </if>
+            </if>
+            <if test="(_parameter instanceof .User$QueryBuilder) == false" >
+                *,
+            </if>
+
+        </trim>
+    </sql>
+
+
+</mapper>

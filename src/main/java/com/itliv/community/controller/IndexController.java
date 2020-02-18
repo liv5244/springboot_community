@@ -3,6 +3,7 @@ package com.itliv.community.controller;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
+import com.itliv.community.dto.QuestionDTO;
 import com.itliv.community.model.Question;
 import com.itliv.community.model.User;
 import com.itliv.community.service.impl.QuestionServiceImpl;
@@ -42,8 +43,8 @@ public class IndexController {
                     "登陆了首页....");
         }
         //从数据库读取问题展示在前台界面
-        Page<Question> lists = questionService.findQuesWithUserByPage(page, 10);
-        PageInfo<Question> pageInfo = new PageInfo<>(lists);
+        Page<QuestionDTO> lists = questionService.findQuesWithUserByPage(page, 10);
+        PageInfo<QuestionDTO> pageInfo = new PageInfo<>(lists);
 //        log.info("首页分页信息："+pageInfo.toString());
         log.info("首页分页信息："+ JSON.toJSONString(pageInfo));
         model.addAttribute("lists", pageInfo);

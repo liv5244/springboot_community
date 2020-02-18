@@ -1,5 +1,6 @@
 package com.itliv.community.controller;
 
+import com.itliv.community.dto.QuestionDTO;
 import com.itliv.community.model.Question;
 import com.itliv.community.model.User;
 import com.itliv.community.service.impl.QuestionServiceImpl;
@@ -27,13 +28,15 @@ public class PublishController {
     QuestionServiceImpl questionService;
 
     @GetMapping("/publish")
-    public String publish(HttpServletRequest request) {
+    public String publish(HttpServletRequest request, Model model) {
         User user = (User) request.getSession().getAttribute("user");
         if (user != null) {
             Date now = new Date();
             log.info(user.getName() + "在时间：" + now +
                     "登陆了publish页....");
         }
+        model.addAttribute("ques",new Question());
+        model.addAttribute("flag", "release");
         return "publish";
     }
 
@@ -48,6 +51,7 @@ public class PublishController {
         if (user != null) {
             Question question = new Question(null, title, content, System.currentTimeMillis(), System.currentTimeMillis(), user.getId(), 0, 0, 0, 0, tag);
             if ("release".equals(flag)) {
+                System.out.println(question);
                 questionService.insertQuestion(question);
             } else if ("edit".equals(flag)){
 //                questionService.upadteQuestion(question);
@@ -61,8 +65,9 @@ public class PublishController {
 
     @GetMapping("/publish/{id}")
     public String editQues(@PathVariable("id") int id, Model model) {
-        Question quesById = questionService.findQuesById(id);
+        QuestionDTO quesById = questionService.findQuesById(id);
         model.addAttribute("ques", quesById);
+        model.addAttribute("flag", "edit");
         return "publish";
     }
 }
