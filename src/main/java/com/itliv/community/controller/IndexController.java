@@ -31,8 +31,6 @@ public class IndexController {
         return "redirect:/index";
     }
 
-    private static int i = 0;
-
     @GetMapping(value = {"/index"})
     public String toIndex(@RequestParam(value = "page",defaultValue = "1") int page,
             HttpServletRequest request, Model model) {
@@ -47,14 +45,9 @@ public class IndexController {
         Page<Question> lists = questionService.findQuesWithUserByPage(page, 10);
         PageInfo<Question> pageInfo = new PageInfo<>(lists);
 //        log.info("首页分页信息："+pageInfo.toString());
-        System.out.println(i++);
         log.info("首页分页信息："+ JSON.toJSONString(pageInfo));
         model.addAttribute("lists", pageInfo);
         return "index";
     }
 
-    @GetMapping("/info")
-    public String infoWithoutAuthority() {
-        return "info";
-    }
 }

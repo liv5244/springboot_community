@@ -34,7 +34,6 @@ public class LoginInterceptor implements HandlerInterceptor {
                     if (users != null && users.size() == 1) {
                         user = users.get(0);
                         request.getSession().setAttribute("user", user);
-                        log.info("user为：" + user + "尝试登陆");
                         return true;
                     }
                 }

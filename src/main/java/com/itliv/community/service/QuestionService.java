@@ -17,4 +17,13 @@ public interface QuestionService {
      * @return
      */
     public Page<Question> findQuesWithUserByPage(int pageNum, int pageSize);
+
+    Page<Question> findMyQuesByIdForPage(int pageNum, int pageSize, int creator);
+
+    /**
+     * 根据id查询Ques
+     * @param id
+     * @return
+     */
+    Question findQuesById(int id);
 }

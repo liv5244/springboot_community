@@ -29,4 +29,15 @@ public class QuestionServiceImpl implements QuestionService {
         PageHelper.startPage(pageNum, pageSize);
         return questionMapper.findQuesWithUserByPage();
     }
+
+    @Override
+    public Page<Question> findMyQuesByIdForPage(int pageNum, int pageSize, int creator) {
+        PageHelper.startPage(pageNum, pageSize);
+        return questionMapper.findMyQuesByIdForPage(creator);
+    }
+
+    @Override
+    public Question findQuesById(int id) {
+        return questionMapper.findQuesByIdWithUser(id);
+    }
 }

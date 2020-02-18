@@ -36,4 +36,18 @@
         ORDER BY q.`gmt_create` DESC
     </select>
 
+    <select id="findMyQuesByIdForPage" resultMap="QuestionWithUser">
+        select q.*,u.*
+        from question q
+                 left join user u on q.creator = u.id
+        where creator = #{creator}
+        order by q.`gmt_create` DESC
+    </select>
+
+    <select id="findQuesByIdWithUser" resultMap="QuestionWithUser">
+        SELECT q.*,u.*
+        FROM question q
+                 LEFT JOIN user u ON q.creator = u.id
+        WHERE q.id = #{id}
+    </select>
 </mapper>

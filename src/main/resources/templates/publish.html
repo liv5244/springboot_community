@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>论坛</title>
-    <link rel="stylesheet" th:href="@{webjars/bootstrap/4.4.1/css/bootstrap.css}">
-    <link rel="stylesheet" th:href="@{static/css/index.css}">
-    <link rel="stylesheet" th:href="@{static/css/publish.css}">
-    <link rel="shortcut icon" th:href="@{static/images/favicon.ico}" type="image/x-icon"/>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.4.1/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/static/css/index.css}">
+    <link rel="stylesheet" th:href="@{/static/css/publish.css}">
+    <link rel="shortcut icon" th:href="@{/static/images/favicon.ico}" type="image/x-icon"/>
 
-    <script type="application/javascript" th:src="@{webjars/jquery/3.4.1/jquery.js}"></script>
-    <script type="application/javascript" th:src="@{webjars/bootstrap/4.4.1/js/bootstrap.js}"></script>
+    <script type="application/javascript" th:src="@{/webjars/jquery/3.4.1/jquery.js}"></script>
+    <script type="application/javascript" th:src="@{/webjars/bootstrap/4.4.1/js/bootstrap.js}"></script>
 
 </head>
 <body>
@@ -30,15 +30,15 @@
                 </h2>
                 <div class="form-group">
                     <h5><label for="title">标题（简单扼要）：</label></h5>
-                    <input type="text" class="form-control" id="title" name="title" placeholder="问题标题.....">
+                    <input type="text" class="form-control" id="title" name="title" placeholder="问题标题....." th:value="${ques.title == null ? '' : ques.title}">
                 </div>
                 <div class="form-group">
                     <h5><label for="content">问题补充（必填，参看右侧提示）：</label></h5>
-                    <textarea class="form-control" id="content" rows="18" name="content"></textarea>
+                    <textarea class="form-control" id="content" rows="18" name="content" th:text="${ques.content == null ? '':ques.content }"></textarea>
                 </div>
                 <div class="form-group">
                     <h5><label for="tag">添加标签：</label></h5>
-                    <input type="text" class="form-control" id="tag" name="tag" placeholder="标签按照 , 分隔开">
+                    <input type="text" class="form-control" id="tag" name="tag" placeholder="标签按照 , 分隔开" th:value="${ques.tag == null ? '':ques.tag}">
                 </div>
                 <h5><label for="tag">选择文件：</label></h5>
                 <div class="form-group custom-file">
@@ -46,7 +46,7 @@
                     <label class="custom-file-label" for="uploadFile">Choose file</label>
                 </div>
                 <div>
-                    <button type="button" class="btn btn-success " id="release">发布</button>
+                    <button type="button" class="btn btn-success " th:id="${ques == null ? 'release' : 'edit'}" th:text="${ques == null ? '发布':'修改'}"></button>
                 </div>
             </form>
 
@@ -72,7 +72,21 @@
             $.ajax({
                 url: "/publish",
                 type: "POST",
-                data: {"title": title, "content": content, "tag": tag},
+                data: {"title": title, "content": content, "tag": tag, "flag": "release"},
+                success: function (res) {
+                    console.log(res);
+                }
+            });
+        });
+
+        $("#edit").click(function () {
+            title = $("#title").val();
+            content = $("#content").val();
+            tag = $("#tag").val();
+            $.ajax({
+                url: "/publish",
+                type: "POST",
+                data: {"title": title, "content": content, "tag": tag, "flag": "edit"},
                 success: function (res) {
                     console.log(res);
                 }

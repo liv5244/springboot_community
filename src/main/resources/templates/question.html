@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>我的主页</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.4.1/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/static/css/question.css}">
+    <link rel="shortcut icon" th:href="@{/static/images/favicon.ico}" type="image/x-icon"/>
+
+    <script type="application/javascript" th:src="@{/webjars/jquery/3.4.1/jquery.js}"></script>
+    <script type="application/javascript" th:src="@{/webjars/bootstrap/4.4.1/js/bootstrap.js}"></script>
+</head>
+<body>
+<!--引入nav  bar-->
+<div th:replace="common/nav::nav"></div>
+<div class="container main">
+    <div class="row">
+        <div class="col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12 left_cont">
+            <a href="/index" class="option">
+                <svg class="bi bi-chevron-left" width="2em" height="2em" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M13.354 3.646a.5.5 0 010 .708L7.707 10l5.647 5.646a.5.5 0 01-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z" clip-rule="evenodd"></path>
+                </svg>
+            </a>
+
+            <h1>
+                <svg class="bi bi-list-task" width="1em" height="1em" viewBox="0 0 20 20" fill="currentColor"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                          d="M4 4.5a.5.5 0 00-.5.5v1a.5.5 0 00.5.5h1a.5.5 0 00.5-.5V5a.5.5 0 00-.5-.5H4zM5 5H4v1h1V5z"
+                          clip-rule="evenodd"></path>
+                    <path d="M7 5.5a.5.5 0 01.5-.5h9a.5.5 0 010 1h-9a.5.5 0 01-.5-.5zM7.5 9a.5.5 0 000 1h9a.5.5 0 000-1h-9zm0 4a.5.5 0 000 1h9a.5.5 0 000-1h-9z"></path>
+                    <path fill-rule="evenodd"
+                          d="M3.5 9a.5.5 0 01.5-.5h1a.5.5 0 01.5.5v1a.5.5 0 01-.5.5H4a.5.5 0 01-.5-.5V9zM4 9h1v1H4V9zm0 3.5a.5.5 0 00-.5.5v1a.5.5 0 00.5.5h1a.5.5 0 00.5-.5v-1a.5.5 0 00-.5-.5H4zm1 .5H4v1h1v-1z"
+                          clip-rule="evenodd"></path>
+                </svg>
+                [[${ques.title}]]
+            </h1>
+            <span class="text_color_999 ques_info">作者：[[${ques.user.name}]] | 发布于[[${#dates.format(ques.gmtCreate, 'yyyy-MM-dd HH:mm')}]] | 评论数：[[${ques.viewCount}]]</span>
+            <a th:href="@{'/publish/'+${ques.id}}" class="option">
+                <svg class="bi bi-pencil" width="1em" height="1em" viewBox="0 0 20 20" fill="currentColor"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                          d="M13.293 3.293a1 1 0 011.414 0l2 2a1 1 0 010 1.414l-9 9a1 1 0 01-.39.242l-3 1a1 1 0 01-1.266-1.265l1-3a1 1 0 01.242-.391l9-9zM14 4l2 2-9 9-3 1 1-3 9-9z"
+                          clip-rule="evenodd"></path>
+                    <path fill-rule="evenodd"
+                          d="M14.146 8.354l-2.5-2.5.708-.708 2.5 2.5-.708.708zM5 12v.5a.5.5 0 00.5.5H6v.5a.5.5 0 00.5.5H7v.5a.5.5 0 00.5.5H8v-1.5a.5.5 0 00-.5-.5H7v-.5a.5.5 0 00-.5-.5H5z"
+                          clip-rule="evenodd"></path>
+                </svg>
+                编辑
+            </a>
+            <a href="#" class="option">
+                <svg class="bi bi-trash" width="1em" height="1em" viewBox="0 0 20 20" fill="currentColor"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7.5 7.5A.5.5 0 018 8v6a.5.5 0 01-1 0V8a.5.5 0 01.5-.5zm2.5 0a.5.5 0 01.5.5v6a.5.5 0 01-1 0V8a.5.5 0 01.5-.5zm3 .5a.5.5 0 00-1 0v6a.5.5 0 001 0V8z"></path>
+                    <path fill-rule="evenodd"
+                          d="M16.5 5a1 1 0 01-1 1H15v9a2 2 0 01-2 2H7a2 2 0 01-2-2V6h-.5a1 1 0 01-1-1V4a1 1 0 011-1H8a1 1 0 011-1h2a1 1 0 011 1h3.5a1 1 0 011 1v1zM6.118 6L6 6.059V15a1 1 0 001 1h6a1 1 0 001-1V6.059L13.882 6H6.118zM4.5 5V4h11v1h-11z"
+                          clip-rule="evenodd"></path>
+                </svg>
+                删除
+            </a>
+            <hr>
+            <div th:text="${ques.content}">
+
+            </div>
+            <hr>
+            <span class="badge badge-pill badge-primary" th:text="${ques.tag}"></span>
+            <hr>
+            <h2>[[${ques.commentCount}]]个回复</h2>
+            <hr>
+        </div>
+        <div class="col-xl-3 col-lg-12 col-md-12 col-sm-12 col-12 right_bar">
+            <div class="media">
+                <img th:src="${ques.user.avatarUrl}" class="mr-3" th:alt="${ques.user.name}">
+                <div class="media-body">
+                    <h5 class="mt-0" th:text="${ques.user.name}"></h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

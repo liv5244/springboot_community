@@ -1,0 +1,71 @@
+body {
+    background-image: url("../images/bg.jpg");
+}
+
+.main {
+    padding: 25px;
+    margin-top: 20px;
+    background: white;
+}
+
+.left_cont h1 {
+    font-size: 25px;
+    line-height: 30px;
+    color: #333;
+    font-family: candara, "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "WenQuanYi Micro Hei", "Microsoft Yahei", sans-serif, -apple-system;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.left_cont {
+    border-right-color: rgba(0, 0, 0, 0.125);
+    border-right-style: solid;
+    border-right-width: 1px;
+}
+
+.text_color_999 {
+    color: #999;
+    font-size: 12px;
+    font-style: normal;
+    line-height: 160%;
+}
+
+.ques_info {
+    margin-right: 60px;
+}
+
+.left_cont h2 {
+    top: 16px;
+    left: 20px;
+    margin: 0;
+    font-size: 20px;
+    color: #333;
+    line-height: 1.7;
+    font-family: candara, "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "WenQuanYi Micro Hei", "Microsoft Yahei", sans-serif, -apple-system;
+}
+
+.option {
+    color: #155faa;
+    margin-right: 10px;
+
+}
+
+.option:hover {
+    text-decoration: none;
+}
+
+.media-body {
+    margin-top: 10px;
+}
+
+.media {
+    margin-top: 20px;
+    margin-left: 15px;
+}
+
+.media img {
+    width: 35px;
+    height: 35px;
+    margin-top: 8px;
+}

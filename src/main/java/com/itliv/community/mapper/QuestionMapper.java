@@ -16,4 +16,11 @@ public interface QuestionMapper {
      * @return
      */
     Page<Question> findQuesWithUserByPage();
+
+    /**
+     * 根据id查询用户的问题
+     */
+    Page<Question> findMyQuesByIdForPage(int creator);
+
+    Question findQuesByIdWithUser(int id);
 }

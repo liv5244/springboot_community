@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>论坛</title>
-    <link rel="stylesheet" th:href="@{webjars/bootstrap/4.4.1/css/bootstrap.css}">
-    <link rel="stylesheet" th:href="@{static/css/index.css}">
-    <link rel="shortcut icon" th:href="@{static/images/favicon.ico}" type="image/x-icon"/>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.4.1/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/static/css/index.css}">
+    <link rel="shortcut icon" th:href="@{/static/images/favicon.ico}" type="image/x-icon"/>
 
-    <script type="application/javascript" th:src="@{webjars/jquery/3.4.1/jquery.js}"></script>
-    <script type="application/javascript" th:src="@{webjars/bootstrap/4.4.1/js/bootstrap.js}"></script>
+    <script type="application/javascript" th:src="@{/webjars/jquery/3.4.1/jquery.js}"></script>
+    <script type="application/javascript" th:src="@{/webjars/bootstrap/4.4.1/js/bootstrap.js}"></script>
 
 </head>
 <body>
@@ -36,7 +36,7 @@
                 <li class="media my-4">
                     <img th:src="${question.user.avatarUrl}" class="mr-3" th:alt="${question.user.name}">
                     <div class="media-body">
-                        <a class="mt-0 mb-1 d-block" th:text="${question.title}"></a>
+                        <a class="mt-0 mb-1 d-block" th:text="${question.title}" th:href="@{'/question/info/'+${question.id}}"></a>
                         <span class="info_span">
                             • <span th:text="${question.commentCount}">*</span> 个回复 • <span
                                 th:text="${question.viewCount}">*</span> 次浏览 • 时间： <span
