@@ -86,14 +86,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUser(User user) {
         System.out.println("更新了用户的下列信息:" + user);
-        System.out.println(user);
         userMapper.updateByPrimaryKey(user);
     }
 
     @Override
     public List<User> findUserByToken(String token) {
         List<User> users = userMapper.findUserByToken(token);
-        log.info("findByToken:"+token);
         return users;
     }
 }

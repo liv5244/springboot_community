@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>错误页面</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.4.1/css/bootstrap.css}">
+    <link rel="shortcut icon" th:href="@{/static/images/favicon.ico}" type="image/x-icon"/>
+
+    <script type="application/javascript" th:src="@{/webjars/jquery/3.4.1/jquery.js}"></script>
+    <script type="application/javascript" th:src="@{/webjars/bootstrap/4.4.1/js/bootstrap.js}"></script>
+
+</head>
+<body>
+<div th:replace="common/nav::nav"></div>
+<div class="jumbotron" style="    padding-left: 500px;    padding-top: 150px;    background: white;">
+    <h1 class="display-4">出错啦~~</h1>
+    <p th:text="${message}" class="my-4 lead">出错了。。。。</p>
+    <a class="btn btn-primary btn-lg" th:href="@{/index}" role="button">主页</a>
+</div>
+</body>
+</html>

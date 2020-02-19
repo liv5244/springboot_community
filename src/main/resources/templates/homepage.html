@@ -34,7 +34,7 @@
                 <li class="media my-4">
                     <img th:src="${question.user.avatarUrl}" class="mr-3" th:alt="${question.user.name}">
                     <div class="media-body">
-                        <a class="mt-0 mb-1 d-block" th:text="${question.title}"></a>
+                        <a class="mt-0 mb-1 d-block" th:text="${question.title}" th:href="@{'/question/my/info/'+${question.id}}"></a>
                         <span class="info_span">
                             • <span th:text="${question.commentCount}">*</span> 个回复 • <span
                                 th:text="${question.viewCount}">*</span> 次浏览 • 时间： <span
@@ -67,7 +67,7 @@
             </nav>
         </div>
         <div class="col-xl-3 col-lg-12 col-md-12 col-sm-12 col-12 right_bar">
-            <div th:replace="common/nav::#navs"></div>
+            <div th:replace="common/nav::#navs(pubQues= ${lists.getTotal()}, activeUri='pub_ques')"></div>
         </div>
     </div>
 </div>

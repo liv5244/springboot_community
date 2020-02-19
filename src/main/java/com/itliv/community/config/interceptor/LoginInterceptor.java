@@ -40,6 +40,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             }
         }
 //        request.getRequestDispatcher("/info").forward(request, response);
+        System.out.println("出现了登录问题");
         return true;
     }
 

@@ -1,6 +1,8 @@
 package com.itliv.community.controller;
 
 import com.itliv.community.dto.QuestionDTO;
+import com.itliv.community.exception.CustomizeErrorCode;
+import com.itliv.community.exception.CustomizeException;
 import com.itliv.community.model.Question;
 import com.itliv.community.model.User;
 import com.itliv.community.service.impl.QuestionServiceImpl;
@@ -35,7 +37,7 @@ public class PublishController {
             log.info(user.getName() + "在时间：" + now +
                     "登陆了publish页....");
         }
-        model.addAttribute("ques",new Question());
+        model.addAttribute("ques", new Question());
         model.addAttribute("flag", "release");
         return "publish";
     }
@@ -49,14 +51,17 @@ public class PublishController {
         String flag = request.getParameter("flag");
         User user = (User) request.getSession().getAttribute("user");
         if (user != null) {
-            Question question = new Question(null, title, content, System.currentTimeMillis(), System.currentTimeMillis(), user.getId(), 0, 0, 0, 0, tag);
             if ("release".equals(flag)) {
+                Question question = new Question(null, title, content, System.currentTimeMillis(), System.currentTimeMillis(), user.getId(), 0, 0, 0, 0, tag);
                 System.out.println(question);
                 questionService.insertQuestion(question);
-            } else if ("edit".equals(flag)){
-//                questionService.upadteQuestion(question);
             }
-            log.info("id 为：" + user.getAccountId() + ",name 为：" + user.getName() + "提交了问题：title-" + title + ",content-" + content + ",tag-" + tag);
+            if ("edit".equals(flag)) {
+                String id = request.getParameter("id");
+                Question question = new Question(Integer.parseInt(id), title, content, System.currentTimeMillis(), System.currentTimeMillis(), user.getId(), 0, 0, 0, 0, tag);
+                questionService.upadteQuestion(question);
+            }
+            log.info("id 为：" + user.getAccountId() + ",name 为： " + user.getName() + flag + " 了问题：title-" + title + ",content-" + content + ",tag-" + tag);
             return Msg.success();
         } else {
             return Msg.fail();
@@ -64,8 +69,18 @@ public class PublishController {
     }
 
     @GetMapping("/publish/{id}")
-    public String editQues(@PathVariable("id") int id, Model model) {
+    public String editQues(@PathVariable("id") int id, Model model,
+                           HttpServletRequest request) {
         QuestionDTO quesById = questionService.findQuesById(id);
+        if (quesById == null) {
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
+        User user = (User) request.getSession().getAttribute("user");
+        if (!quesById.getUser().getAccountId().equals(user.getAccountId())) {
+            //没有权限修改该问题
+            throw new CustomizeException(CustomizeErrorCode.PERMISSION_DENIED);
+        }
+
         model.addAttribute("ques", quesById);
         model.addAttribute("flag", "edit");
         return "publish";

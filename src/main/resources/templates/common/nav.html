@@ -5,7 +5,7 @@
     <title>nav抽取</title>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.4.1/css/bootstrap.css}">
     <link rel="stylesheet" th:href="@{/static/css/nav.css}">
-    <link rel="shortcut icon" th:href="@{/static/images/favicon.ico}" type="image/x-icon" />
+    <link rel="shortcut icon" th:href="@{/static/images/favicon.ico}" type="image/x-icon"/>
 
     <script type="application/javascript" th:src="@{/webjars/jquery/3.4.1/jquery.js}"></script>
     <script type="application/javascript" th:src="@{/webjars/bootstrap/4.4.1/js/bootstrap.js}"></script>
@@ -18,7 +18,8 @@
             <img th:src="@{/static/images/icon.jpg}" width="30" height="30" class="d-inline-block align-top" alt="">
         </a>
         <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2 search_input " type="search" placeholder="Search" aria-label="Search" style="width: 300px">
+            <input class="form-control mr-sm-2 search_input " type="search" placeholder="Search" aria-label="Search"
+                   style="width: 300px">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索</button>
         </form>
 
@@ -70,11 +71,15 @@
 <!--抽取主页的右侧的navs-->
 
 <div class="list-group" id="navs">
-    <a href="#" class="list-group-item list-group-item-action active" style="border: none;">
+    <a href="#" style="border: none;"
+        th:class="${activeUri == 'pub_ques' ? 'list-group-item list-group-item-action active' : 'list-group-item list-group-item-action '}">
         我提出的问题
+        <span class="badge badge-light" style="float: right; margin-top: 3px;"
+            th:text="${pubQues}">
+        </span>
     </a>
     <a href="#" class="list-group-item list-group-item-action" style="border: none;">我关注的问题</a>
-    <a href="#" class="list-group-item list-group-item-action"style="border: none;">我的草稿</a>
+    <a href="#" class="list-group-item list-group-item-action" style="border: none;">我的草稿</a>
     <a href="#" class="list-group-item list-group-item-action" style="border: none;">我的收藏</a>
 </div>
 </body>

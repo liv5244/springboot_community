@@ -27,4 +27,6 @@ public interface QuestionService {
      * @return
      */
     QuestionDTO findQuesById(int id);
+
+    void upadteQuestion(Question question);
 }

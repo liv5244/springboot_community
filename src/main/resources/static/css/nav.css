@@ -4,3 +4,7 @@
 #navs a {
     border:none;
 }
+.badge {
+    float: right;
+    margin-top: 3px;
+}

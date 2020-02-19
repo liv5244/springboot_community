@@ -39,4 +39,9 @@ public class QuestionServiceImpl implements QuestionService {
     public QuestionDTO findQuesById(int id) {
         return questionMapper.findQuesByIdWithUser(id);
     }
+
+    @Override
+    public void upadteQuestion(Question question) {
+        questionMapper.updateByPrimaryKeySelective(question);
+    }
 }
