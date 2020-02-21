@@ -19,7 +19,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public void insertQuestion(Question question) {
-        log.info("执行了插入语句,插入的question："+question);
+        log.info("执行了插入语句,插入的question：" + question);
         questionMapper.insertSelective(question);
     }
 
@@ -43,5 +43,26 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public void upadteQuestion(Question question) {
         questionMapper.updateByPrimaryKeySelective(question);
+    }
+
+    @Override
+    public void incViewCount(int id) {
+        Question ques = new Question();
+        ques.setId(id);
+        ques.setViewCount(1);
+        questionMapper.incViewCount(ques);
+    }
+
+    @Override
+    public void incCommentCount(int id) {
+        Question question = new Question();
+        question.setId(id);
+        question.setCommentCount(1);
+        questionMapper.incCommentCount(question);
+    }
+
+    @Override
+    public void delQuesById(int id) {
+        questionMapper.deleteByPrimaryKey(id);
     }
 }

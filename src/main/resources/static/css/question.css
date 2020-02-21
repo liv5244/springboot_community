@@ -52,6 +52,7 @@ body {
 }
 
 .option:hover {
+    color: #499ef3;
     text-decoration: none;
 }
 
@@ -68,4 +69,60 @@ body {
     width: 35px;
     height: 35px;
     margin-top: 8px;
+}
+
+.btn-info {
+    float: right;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.reply {
+    margin-top: 20px;
+}
+
+.comment_name {
+    cursor: pointer;
+    font-weight: 700;
+    color: rgba(0, 0, 0, .87);
+    text-decoration: none;
+    background: 0 0;
+    font-family: candara, "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "WenQuanYi Micro Hei", "Microsoft Yahei", sans-serif, -apple-system;
+    font-size: 14px;
+    line-height: 160%;
+}
+
+.comment_name:hover {
+    color: #499ef3;
+    text-decoration: none;
+}
+
+.time_span {
+    color: #bbbbbb;
+    font-size: .875em;
+    margin-left: 10px;
+}
+
+.comment_content {
+    margin: 0 0 .5em;
+    line-height: inherit;
+    font-size: 1.1em;
+}
+
+.like {
+    margin-right: 5px;
+}
+
+.bi {
+    margin: 0 5px 0 10px;
+}
+
+.like_count, .comment_count {
+    font-size: 10px;
+    color: #858585;
+    -moz-user-select:none;
+}
+
+.count_div {
+    margin: 0 0 10px 10px;
 }

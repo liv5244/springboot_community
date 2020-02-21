@@ -15,6 +15,7 @@ public class CustomizeExceptionHandler {
             model.addAttribute("message", ex.getMessage());
         } else {
             model.addAttribute("message", "出现了异常");
+            System.out.println(ex.getMessage());
         }
         return new ModelAndView("error");
     }

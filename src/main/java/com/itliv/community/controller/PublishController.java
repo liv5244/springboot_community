@@ -53,7 +53,6 @@ public class PublishController {
         if (user != null) {
             if ("release".equals(flag)) {
                 Question question = new Question(null, title, content, System.currentTimeMillis(), System.currentTimeMillis(), user.getId(), 0, 0, 0, 0, tag);
-                System.out.println(question);
                 questionService.insertQuestion(question);
             }
             if ("edit".equals(flag)) {

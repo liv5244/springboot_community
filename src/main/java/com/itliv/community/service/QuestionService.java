@@ -29,4 +29,18 @@ public interface QuestionService {
     QuestionDTO findQuesById(int id);
 
     void upadteQuestion(Question question);
+
+    /**
+     * 增加view的计数
+     * @param id
+     */
+    void incViewCount(int id);
+
+    /**
+     * 增加comment的count
+     * @param id
+     */
+    void incCommentCount(int id);
+
+    void delQuesById(int id);
 }

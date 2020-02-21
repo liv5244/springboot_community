@@ -31,4 +31,8 @@ public interface QuestionMapper {
     Page<QuestionDTO> findMyQuesByIdForPage(int creator);
 
     QuestionDTO findQuesByIdWithUser(int id);
+
+    void incViewCount(Question ques);
+
+    void incCommentCount(Question question);
 }

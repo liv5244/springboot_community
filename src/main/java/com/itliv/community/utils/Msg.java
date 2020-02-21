@@ -1,5 +1,6 @@
 package com.itliv.community.utils;
 
+import com.itliv.community.exception.CustomizeErrorCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +18,7 @@ public class Msg {
     private int code;
     private Map<String, Object> ext = new HashMap<>();
 
+
     public static Msg success() {
         Msg result = new Msg();
         result.msg = "success";
@@ -28,6 +30,13 @@ public class Msg {
         Msg result = new Msg();
         result.msg = "failed";
         result.code = 0;
+        return result;
+    }
+
+    public static Msg fail(CustomizeErrorCode userNotLogin) {
+        Msg result = new Msg();
+        result.msg = userNotLogin.getMessage();
+        result.code = userNotLogin.getCode();
         return result;
     }
 

@@ -1,207 +1,271 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.itliv.community.mapper.QuestionMapper">
-  <resultMap id="BaseResultMap" type="com.itliv.community.model.Question">
-    <id column="question_id" jdbcType="INTEGER" property="id" />
-    <result column="question_title" jdbcType="VARCHAR" property="title" />
-    <result column="question_content" jdbcType="VARCHAR" property="content" />
-    <result column="question_gmt_create" jdbcType="BIGINT" property="gmtCreate" />
-    <result column="question_gmt_modified" jdbcType="BIGINT" property="gmtModified" />
-    <result column="question_creator" jdbcType="INTEGER" property="creator" />
-    <result column="question_comment_count" jdbcType="INTEGER" property="commentCount" />
-    <result column="question_view_count" jdbcType="INTEGER" property="viewCount" />
-    <result column="question_like_count" jdbcType="INTEGER" property="likeCount" />
-    <result column="question_collect_count" jdbcType="INTEGER" property="collectCount" />
-    <result column="question_tag" jdbcType="VARCHAR" property="tag" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.itliv.community.model.Question">
+        <id column="question_id" jdbcType="INTEGER" property="id"/>
+        <result column="question_title" jdbcType="VARCHAR" property="title"/>
+        <result column="question_content" jdbcType="VARCHAR" property="content"/>
+        <result column="question_gmt_create" jdbcType="BIGINT" property="gmtCreate"/>
+        <result column="question_gmt_modified" jdbcType="BIGINT" property="gmtModified"/>
+        <result column="question_creator" jdbcType="INTEGER" property="creator"/>
+        <result column="question_comment_count" jdbcType="INTEGER" property="commentCount"/>
+        <result column="question_view_count" jdbcType="INTEGER" property="viewCount"/>
+        <result column="question_like_count" jdbcType="INTEGER" property="likeCount"/>
+        <result column="question_collect_count" jdbcType="INTEGER" property="collectCount"/>
+        <result column="question_tag" jdbcType="VARCHAR" property="tag"/>
+    </resultMap>
 
-  <resultMap id="QuestionWithUser" type="com.itliv.community.dto.QuestionDTO">
-    <id column="id" jdbcType="INTEGER" property="id"/>
-    <result column="title" property="title"/>
-    <result column="content" property="content"/>
-    <result column="gmt_create" property="gmtCreate"/>
-    <result column="gmt_modified" property="gmtModified"/>
-    <result column="creator" property="creator"/>
-    <result column="comment_count" property="commentCount"/>
-    <result column="view_count" property="viewCount"/>
-    <result column="like_count" property="likeCount"/>
-    <result column="collect_count" property="collectCount"/>
-    <result column="tag" property="tag"/>
-    <association property="user" javaType="com.itliv.community.model.User">
-      <id column="id" property="id"/>
-      <result column="name" property="name"/>
-      <result column="account_id" property="accountId"/>
-      <result column="token" property="token"/>
-      <result column="gmt_create" property="gmtCreate"/>
-      <result column="gmt_modified" property="gmtModified"/>
-      <result column="avatar_url" property="avatarUrl"/>
-    </association>
-  </resultMap>
+    <resultMap id="QuestionWithUser" type="com.itliv.community.dto.QuestionDTO">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <result column="creator" property="creator"/>
+        <result column="comment_count" property="commentCount"/>
+        <result column="view_count" property="viewCount"/>
+        <result column="like_count" property="likeCount"/>
+        <result column="collect_count" property="collectCount"/>
+        <result column="tag" property="tag"/>
+        <association property="user" javaType="com.itliv.community.model.User">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+            <result column="account_id" property="accountId"/>
+            <result column="token" property="token"/>
+            <result column="gmt_create" property="gmtCreate"/>
+            <result column="gmt_modified" property="gmtModified"/>
+            <result column="avatar_url" property="avatarUrl"/>
+        </association>
+    </resultMap>
 
-  <select id="findQuesWithUserByPage" resultMap="QuestionWithUser">
-    SELECT q.*, u.*
-    FROM `question` q
-           LEFT JOIN USER u ON q.`creator` = u.`id`
-    ORDER BY q.`gmt_create` DESC
-  </select>
+    <select id="findQuesWithUserByPage" resultMap="QuestionWithUser">
+        SELECT q.*, u.*
+        FROM `question` q
+                 LEFT JOIN USER u ON q.`creator` = u.`id`
+        ORDER BY q.`gmt_create` DESC
+    </select>
 
-  <select id="findMyQuesByIdForPage" resultMap="QuestionWithUser">
-    select q.*,u.*
-    from question q
-           left join user u on q.creator = u.id
-    where creator = #{creator}
-    order by q.`gmt_create` DESC
-  </select>
+    <select id="findMyQuesByIdForPage" resultMap="QuestionWithUser">
+        select q.*,u.*
+        from question q
+                 left join user u on q.creator = u.id
+        where creator = #{creator}
+        order by q.`gmt_create` DESC
+    </select>
 
-  <select id="findQuesByIdWithUser" resultMap="QuestionWithUser">
-    SELECT q.*,u.*
-    FROM question q
-           LEFT JOIN user u ON q.creator = u.id
-    WHERE q.id = #{id}
-  </select>
+    <select id="findQuesByIdWithUser" resultMap="QuestionWithUser">
+        SELECT q.*,u.*
+        FROM question q
+                 LEFT JOIN user u ON q.creator = u.id
+        WHERE q.id = #{id}
+    </select>
 
-  <sql id="Base_Column_List">
-    question.id as question_id, question.title as question_title, question.content as question_content, 
-    question.gmt_create as question_gmt_create, question.gmt_modified as question_gmt_modified, 
-    question.creator as question_creator, question.comment_count as question_comment_count, 
-    question.view_count as question_view_count, question.like_count as question_like_count, 
-    question.collect_count as question_collect_count, question.tag as question_tag
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from question question
-    where question.id = #{id,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from question
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itliv.community.model.Question" useGeneratedKeys="true">
-    insert into question (title, content, gmt_create, 
-      gmt_modified, creator, comment_count, 
-      view_count, like_count, collect_count, 
-      tag)
-    values (#{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=BIGINT}, 
-      #{gmtModified,jdbcType=BIGINT}, #{creator,jdbcType=INTEGER}, #{commentCount,jdbcType=INTEGER}, 
-      #{viewCount,jdbcType=INTEGER}, #{likeCount,jdbcType=INTEGER}, #{collectCount,jdbcType=INTEGER}, 
-      #{tag,jdbcType=VARCHAR})
-  </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itliv.community.model.Question" useGeneratedKeys="true">
-    insert into question
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="title != null">
-        title,
-      </if>
-      <if test="content != null">
-        content,
-      </if>
-      <if test="gmtCreate != null">
-        gmt_create,
-      </if>
-      <if test="gmtModified != null">
-        gmt_modified,
-      </if>
-      <if test="creator != null">
-        creator,
-      </if>
-      <if test="commentCount != null">
-        comment_count,
-      </if>
-      <if test="viewCount != null">
-        view_count,
-      </if>
-      <if test="likeCount != null">
-        like_count,
-      </if>
-      <if test="collectCount != null">
-        collect_count,
-      </if>
-      <if test="tag != null">
-        tag,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="title != null">
-        #{title,jdbcType=VARCHAR},
-      </if>
-      <if test="content != null">
-        #{content,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtCreate != null">
-        #{gmtCreate,jdbcType=BIGINT},
-      </if>
-      <if test="gmtModified != null">
-        #{gmtModified,jdbcType=BIGINT},
-      </if>
-      <if test="creator != null">
-        #{creator,jdbcType=INTEGER},
-      </if>
-      <if test="commentCount != null">
-        #{commentCount,jdbcType=INTEGER},
-      </if>
-      <if test="viewCount != null">
-        #{viewCount,jdbcType=INTEGER},
-      </if>
-      <if test="likeCount != null">
-        #{likeCount,jdbcType=INTEGER},
-      </if>
-      <if test="collectCount != null">
-        #{collectCount,jdbcType=INTEGER},
-      </if>
-      <if test="tag != null">
-        #{tag,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.itliv.community.model.Question">
-    update question
-    <set>
-      <if test="title != null">
-        title = #{title,jdbcType=VARCHAR},
-      </if>
-      <if test="content != null">
-        content = #{content,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtCreate != null">
-        gmt_create = #{gmtCreate,jdbcType=BIGINT},
-      </if>
-      <if test="gmtModified != null">
-        gmt_modified = #{gmtModified,jdbcType=BIGINT},
-      </if>
-      <if test="creator != null">
-        creator = #{creator,jdbcType=INTEGER},
-      </if>
-      <if test="commentCount != null">
-        comment_count = #{commentCount,jdbcType=INTEGER},
-      </if>
-      <if test="viewCount != null">
-        view_count = #{viewCount,jdbcType=INTEGER},
-      </if>
-      <if test="likeCount != null">
-        like_count = #{likeCount,jdbcType=INTEGER},
-      </if>
-      <if test="collectCount != null">
-        collect_count = #{collectCount,jdbcType=INTEGER},
-      </if>
-      <if test="tag != null">
-        tag = #{tag,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.itliv.community.model.Question">
-    update question
-    set title = #{title,jdbcType=VARCHAR},
-      content = #{content,jdbcType=VARCHAR},
-      gmt_create = #{gmtCreate,jdbcType=BIGINT},
-      gmt_modified = #{gmtModified,jdbcType=BIGINT},
-      creator = #{creator,jdbcType=INTEGER},
-      comment_count = #{commentCount,jdbcType=INTEGER},
-      view_count = #{viewCount,jdbcType=INTEGER},
-      like_count = #{likeCount,jdbcType=INTEGER},
-      collect_count = #{collectCount,jdbcType=INTEGER},
-      tag = #{tag,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
+    <sql id="Base_Column_List">
+        question
+        .
+        id
+        as
+        question_id
+        ,
+        question
+        .
+        title
+        as
+        question_title,
+        question
+        .
+        content
+        as
+        question_content,
+        question
+        .
+        gmt_create
+        as
+        question_gmt_create,
+        question
+        .
+        gmt_modified
+        as
+        question_gmt_modified,
+        question
+        .
+        creator
+        as
+        question_creator,
+        question
+        .
+        comment_count
+        as
+        question_comment_count,
+        question
+        .
+        view_count
+        as
+        question_view_count,
+        question
+        .
+        like_count
+        as
+        question_like_count,
+        question
+        .
+        collect_count
+        as
+        question_collect_count,
+        question
+        .
+        tag
+        as
+        question_tag
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from question question
+        where question.id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from question
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itliv.community.model.Question"
+            useGeneratedKeys="true">
+        insert into question (title, content, gmt_create,
+                              gmt_modified, creator, comment_count,
+                              view_count, like_count, collect_count,
+                              tag)
+        values (#{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=BIGINT},
+                #{gmtModified,jdbcType=BIGINT}, #{creator,jdbcType=INTEGER}, #{commentCount,jdbcType=INTEGER},
+                #{viewCount,jdbcType=INTEGER}, #{likeCount,jdbcType=INTEGER}, #{collectCount,jdbcType=INTEGER},
+                #{tag,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itliv.community.model.Question"
+            useGeneratedKeys="true">
+        insert into question
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">
+                title,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="gmtCreate != null">
+                gmt_create,
+            </if>
+            <if test="gmtModified != null">
+                gmt_modified,
+            </if>
+            <if test="creator != null">
+                creator,
+            </if>
+            <if test="commentCount != null">
+                comment_count,
+            </if>
+            <if test="viewCount != null">
+                view_count,
+            </if>
+            <if test="likeCount != null">
+                like_count,
+            </if>
+            <if test="collectCount != null">
+                collect_count,
+            </if>
+            <if test="tag != null">
+                tag,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=BIGINT},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=BIGINT},
+            </if>
+            <if test="creator != null">
+                #{creator,jdbcType=INTEGER},
+            </if>
+            <if test="commentCount != null">
+                #{commentCount,jdbcType=INTEGER},
+            </if>
+            <if test="viewCount != null">
+                #{viewCount,jdbcType=INTEGER},
+            </if>
+            <if test="likeCount != null">
+                #{likeCount,jdbcType=INTEGER},
+            </if>
+            <if test="collectCount != null">
+                #{collectCount,jdbcType=INTEGER},
+            </if>
+            <if test="tag != null">
+                #{tag,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.itliv.community.model.Question">
+        update question
+        <set>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="gmtCreate != null">
+                gmt_create = #{gmtCreate,jdbcType=BIGINT},
+            </if>
+            <if test="gmtModified != null">
+                gmt_modified = #{gmtModified,jdbcType=BIGINT},
+            </if>
+            <if test="creator != null">
+                creator = #{creator,jdbcType=INTEGER},
+            </if>
+            <if test="commentCount != null">
+                comment_count = #{commentCount,jdbcType=INTEGER},
+            </if>
+            <if test="viewCount != null">
+                view_count = #{viewCount,jdbcType=INTEGER},
+            </if>
+            <if test="likeCount != null">
+                like_count = #{likeCount,jdbcType=INTEGER},
+            </if>
+            <if test="collectCount != null">
+                collect_count = #{collectCount,jdbcType=INTEGER},
+            </if>
+            <if test="tag != null">
+                tag = #{tag,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.itliv.community.model.Question">
+        update question
+        set title         = #{title,jdbcType=VARCHAR},
+            content       = #{content,jdbcType=VARCHAR},
+            gmt_create    = #{gmtCreate,jdbcType=BIGINT},
+            gmt_modified  = #{gmtModified,jdbcType=BIGINT},
+            creator       = #{creator,jdbcType=INTEGER},
+            comment_count = #{commentCount,jdbcType=INTEGER},
+            view_count    = #{viewCount,jdbcType=INTEGER},
+            like_count    = #{likeCount,jdbcType=INTEGER},
+            collect_count = #{collectCount,jdbcType=INTEGER},
+            tag           = #{tag,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="incViewCount" parameterType="com.itliv.community.model.Question">
+        update question
+        set view_count = view_count + #{viewCount,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="incCommentCount" parameterType="com.itliv.community.model.Question">
+        update question
+        set comment_count = comment_count + #{commentCount,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
 </mapper>
