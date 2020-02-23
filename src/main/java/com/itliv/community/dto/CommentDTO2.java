@@ -32,5 +32,7 @@ public class CommentDTO2 implements Serializable {
 
     private User user;
 
+    private String liker;
+
     private static final long serialVersionUID = 1L;
 }

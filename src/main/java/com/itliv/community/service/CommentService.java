@@ -11,4 +11,5 @@ public interface CommentService {
 
     List<CommentDTO2> findCommentByParentId(int id, int parentId);
 
+    void updateLike(int id, int liker);
 }

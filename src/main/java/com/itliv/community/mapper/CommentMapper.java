@@ -1,6 +1,5 @@
 package com.itliv.community.mapper;
 
-import com.itliv.community.dto.CommentCountDTO;
 import com.itliv.community.dto.CommentDTO2;
 import com.itliv.community.model.Comment;
 import org.apache.ibatis.annotations.Mapper;
@@ -22,5 +21,4 @@ public interface CommentMapper {
     int updateByPrimaryKey(Comment record);
 
     List<CommentDTO2> selectByParentId(int id, int parentId);
-
 }

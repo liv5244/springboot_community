@@ -1,7 +1,12 @@
 body {
     background-image: url("../images/bg.jpg");
 }
-
+a {
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: none;
+}
 .main {
     padding: 25px;
     margin-top: 20px;

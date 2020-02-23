@@ -45,22 +45,22 @@
             </ul>
 
             <!--分页导航栏-->
-            <nav aria-label="Page navigation example">
+            <nav aria-label="Page navigation example" th:unless="${lists.pages==1}">
                 <ul class="pagination justify-content-center">
-                    <li th:class="${lists.pageNum == 1} ? 'page-item disabled':'page-item '">
+                    <li class="page-item" th:unless="${lists.pageNum == 1}">
                         <a class="page-link" th:href="'/homepage?page=1'">首页</a>
                     </li>
-                    <li th:class="${lists.hasPreviousPage} ? 'page-item':'page-item disabled'">
+                    <li class="page-item" th:if="${lists.hasPreviousPage}">
                         <a class="page-link" th:href="'/homepage?page='+${lists.pageNum-1}" tabindex="-1" aria-disabled="true">&lt;</a>
                     </li>
                     <li class="page-item" th:each="pagenum : ${lists.navigatepageNums}"
                         th:class="${lists.pageNum == pagenum} ? 'page-item active' : 'page-item'">
                         <a class="page-link" th:href="'/homepage?page='+${pagenum}">[[${pagenum}]]</a>
                     </li>
-                    <li th:class="${lists.hasNextPage} ? 'page-item':'page-item disabled'">
+                    <li class="page-item" th:if="${lists.hasNextPage}">
                         <a class="page-link" th:href="'/homepage?page='+${lists.pageNum+1}">&gt;</a>
                     </li>
-                    <li th:class="${lists.pageNum == lists.pages} ? 'page-item disabled':'page-item '">
+                    <li class="page-item" th:unless="${lists.pageNum == lists.pages}">
                         <a class="page-link" th:href="'/homepage?page='+${lists.pages}">尾页</a>
                     </li>
                 </ul>

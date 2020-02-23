@@ -2,6 +2,14 @@ body {
     background-image: url("../images/bg.jpg");
 }
 
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
 .main {
     padding: 25px;
     margin-top: 20px;
@@ -120,9 +128,17 @@ body {
 .like_count, .comment_count {
     font-size: 10px;
     color: #858585;
-    -moz-user-select:none;
+    -moz-user-select: none;
 }
 
 .count_div {
     margin: 0 0 10px 10px;
+}
+
+.right_bar p, .right_bar h4 {
+    font-size: 100%;
+}
+
+.right_bar h4 {
+    margin-top: 10px;
 }

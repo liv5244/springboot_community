@@ -58,4 +58,17 @@ public class CommentController {
         return Msg.success().extend("res", comments);
     }
 
+    @GetMapping("/comment/like")
+    @ResponseBody
+    public Msg likeResolve(@RequestParam("id") int id,
+                           HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
+        if (user == null) {
+            return Msg.fail(CustomizeErrorCode.USER_NOT_LOGIN);
+        }
+        int liker = user.getId();
+        commentService.updateLike(id,liker);
+        return Msg.success();
+    }
+
 }

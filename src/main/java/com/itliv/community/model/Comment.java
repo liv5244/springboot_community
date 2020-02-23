@@ -32,5 +32,7 @@ public class Comment implements Serializable {
 
     private String content;
 
+    private String liker;
+
     private static final long serialVersionUID = 1L;
 }

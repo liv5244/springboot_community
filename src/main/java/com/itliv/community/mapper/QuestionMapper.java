@@ -5,6 +5,8 @@ import com.itliv.community.dto.QuestionDTO;
 import com.itliv.community.model.Question;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
 public interface QuestionMapper {
     int deleteByPrimaryKey(Integer id);
@@ -35,4 +37,8 @@ public interface QuestionMapper {
     void incViewCount(Question ques);
 
     void incCommentCount(Question question);
+
+    List<Question> selectRelatedQuestions(Integer id, String tags);
+
+    List<Question> selectHotQuestions();
 }

@@ -6,6 +6,7 @@ import com.itliv.community.enums.CommentTypeEnum;
 import com.itliv.community.exception.CustomizeErrorCode;
 import com.itliv.community.exception.CustomizeException;
 import com.itliv.community.model.Comment;
+import com.itliv.community.model.Question;
 import com.itliv.community.service.impl.CommentServiceImpl;
 import com.itliv.community.service.impl.QuestionServiceImpl;
 import com.itliv.community.utils.Msg;
@@ -34,8 +35,10 @@ public class QuestionControlller {
         }
         questionService.incViewCount(id);
         List<CommentDTO2> comments = commentService.findCommentByParentId(id, CommentTypeEnum.QUESTION.getTypeCode());
+        List<Question> relatedQuestions = questionService.findRelatedQuestions(question);
         model.addAttribute("ques", question);
         model.addAttribute("comments", comments);
+        model.addAttribute("relatedQues", relatedQuestions);
         model.addAttribute("self", false);
         return "question";
     }
@@ -50,6 +53,7 @@ public class QuestionControlller {
         model.addAttribute("ques", question);
         return "question";
     }
+
     @PostMapping("/del")
     @ResponseBody
     public Msg delQues(@RequestParam("id") int id) {

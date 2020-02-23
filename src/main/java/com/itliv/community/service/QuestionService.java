@@ -43,4 +43,9 @@ public interface QuestionService {
     void incCommentCount(int id);
 
     void delQuesById(int id);
+
+    List<Question> findRelatedQuestions(QuestionDTO question);
+
+    List<Question> findHotQuestions();
+
 }

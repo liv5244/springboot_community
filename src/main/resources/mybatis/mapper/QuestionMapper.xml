@@ -124,6 +124,19 @@
         from question question
         where question.id = #{id,jdbcType=INTEGER}
     </select>
+    <select id="selectRelatedQuestions" resultType="com.itliv.community.model.Question">
+        select *
+        from question
+        where id!=#{id} and tag regexp #{param2}
+        order by view_count desc
+                 limit 5
+    </select>
+    <select id="selectHotQuestions" resultType="com.itliv.community.model.Question">
+        select *
+        from question
+        order by view_count desc
+                 limit 8
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
         from question

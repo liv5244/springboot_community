@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 @Slf4j
@@ -47,7 +48,9 @@ public class IndexController {
         PageInfo<QuestionDTO> pageInfo = new PageInfo<>(lists);
 //        log.info("首页分页信息："+pageInfo.toString());
         log.info("首页分页信息："+ JSON.toJSONString(pageInfo));
+        List<Question> hotQuestions = questionService.findHotQuestions();
         model.addAttribute("lists", pageInfo);
+        model.addAttribute("hotQues",hotQuestions);
         return "index";
     }
 

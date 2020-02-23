@@ -84,32 +84,29 @@
                         <span th:text="${#dates.format(comment.gmtCreate,'yyyy-MM-dd HH:mm')}" class="time_span"></span>
                         <p class="comment_content">[[${comment.content}]]</p>
                         <div class="count_div">
-                            <svg class="bi bi-heart-fill like" width="1em" height="1em" viewBox="0 0 20 20"
-                                 fill="currentColor"
-                                 xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd"
-                                      d="M10 3.314C14.438-1.248 25.534 6.735 10 17-5.534 6.736 5.562-1.248 10 3.314z"
-                                      clip-rule="evenodd"></path>
+                            <div style="display: inline;" class="bi-like-div" th:data-id="${comment.id}" th:id="'bi-like-div-'+${comment.id}">
+                                <svg class="bi bi-heart-fill like" width="1em" height="1em" viewBox="0 0 20 20"
+                                     th:fill="${comment.liker==null || session.user==null ? 'black':(#strings.contains(comment.liker,session.user.id+',') ? 'blue':'black' )  }"
+                                     xmlns="http://www.w3.org/2000/svg" th:id="'bi-like-'+${comment.id}">
+                                    <path fill-rule="evenodd"
+                                          d="M10 3.314C14.438-1.248 25.534 6.735 10 17-5.534 6.736 5.562-1.248 10 3.314z"
+                                          clip-rule="evenodd"></path>
+                                </svg>
                                 <span class="like_count" th:text="${comment.likeCount}"
-                                      onselectstart="return false;">11</span>
-                            </svg>
-                            <svg class="bi bi-heart like" width="1em" height="1em" viewBox="0 0 20 20"
-                                 fill="currentColor"
-                                 xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd"
-                                      d="M10 4.748l-.717-.737C7.6 2.281 4.514 2.878 3.4 5.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.837-3.362.314-4.385-1.114-2.175-4.2-2.773-5.883-1.043L10 4.748zM10 17C-5.333 6.868 5.279-1.04 9.824 3.143c.06.055.119.112.176.171a3.12 3.12 0 01.176-.17C14.72-1.042 25.333 6.867 10 17z"
-                                      clip-rule="evenodd"></path>
-                                <span class="like_count" onselectstart="return false;">11</span>
-                            </svg>
+                                      onselectstart="return false;">
+                                </span>
+                            </div>
                             <div style="display: inline;" class="bi-chat-div" th:data-id="${comment.id}">
-                                <svg class="bi bi-chat" width="1em" height="1em" viewBox="0 0 20 20" fill="currentColor"
+                                <svg class="bi bi-chat" width="1em" height="1em" viewBox="0 0 20 20"
+                                     fill="currentColor"
                                      xmlns="http://www.w3.org/2000/svg" th:id="'bi-div-'+${comment.id}">
                                     <path fill-rule="evenodd"
                                           d="M8.207 13.293L7.5 14a5.5 5.5 0 110-11h5a5.5 5.5 0 110 11s-1.807 2.169-4.193 2.818C7.887 16.933 7.449 17 7 17c.291-.389.488-.74.617-1.052C8.149 14.649 7.5 14 7.5 14c.707-.707.708-.707.708-.706h.001l.002.003.004.004.01.01a1.184 1.184 0 01.074.084c.039.047.085.108.134.183.097.15.206.36.284.626.114.386.154.855.047 1.394.717-.313 1.37-.765 1.895-1.201a10.266 10.266 0 001.013-.969l.05-.056.01-.012m0 0A1 1 0 0112.5 13a4.5 4.5 0 100-9h-5a4.5 4.5 0 000 9 1 1 0 01.707.293"
                                           clip-rule="evenodd"></path>
                                 </svg>
                                 <svg class="bi bi-chat-fill" width="1em" height="1em" viewBox="0 0 20 20"
-                                     fill="blue" xmlns="http://www.w3.org/2000/svg" th:id="'bi-fill-div-'+${comment.id}"
+                                     fill="blue" xmlns="http://www.w3.org/2000/svg"
+                                     th:id="'bi-fill-div-'+${comment.id}"
                                      display="none">
                                     <path fill-rule="evenodd"
                                           d="M7.5 14s.65.65.117 1.948A4.821 4.821 0 017 17c.449 0 .887-.067 1.307-.181C10.692 16.169 12.5 14 12.5 14a5.5 5.5 0 100-11h-5a5.5 5.5 0 100 11z"
@@ -119,56 +116,66 @@
                                       th:id="'comment-count'+${comment.id}"></span>
                             </div>
 
-                        </div>
-                        <!--二级评论-->
-                        <div class="collapse" th:id="'col-comment-'+${comment.id}">
-                            <div class="card card-body">
-                                <div>
-                                    <div class="media" th:id="'media-'+${comment.id}">
+                            <!--二级评论-->
+                            <div class="collapse" th:id="'col-comment-'+${comment.id}">
+                                <div class="card card-body">
+                                    <div>
+                                        <div class="media" th:id="'media-'+${comment.id}">
 
-                                    </div>
-                                    <div class="input-group mb-3">
-                                        <input type="text" class="form-control" placeholder="评论一下..."
-                                               th:id="'comment-input-'+${comment.id}">
-                                        <div class="input-group-append comment-reply"
-                                             th:data-parent="${comment.parentId}" th:data-id="${comment.id}">
-                                            <button class="btn btn-outline-secondary btn-success" type="button"
-                                                    th:id="'comment-btn-'+${comment.id}"
-                                                    style="color: white;">评论
-                                            </button>
+                                        </div>
+                                        <div class="input-group mb-3">
+                                            <input type="text" class="form-control" placeholder="评论一下..."
+                                                   th:id="'comment-input-'+${comment.id}">
+                                            <div class="input-group-append comment-reply"
+                                                 th:data-parent="${comment.parentId}" th:data-id="${comment.id}">
+                                                <button class="btn btn-outline-secondary btn-success" type="button"
+                                                        th:id="'comment-btn-'+${comment.id}"
+                                                        style="color: white;">评论
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
-
                     </div>
                 </div>
+                <hr>
             </div>
-            <hr>
-
-            <div id="reply_div">
-                <div class="media" th:if="session.user">
-                    <img th:src="${session.user.avatarUrl}" class="mr-3" th:alt="${session.user.name}">
-                    <div class="media-body">
-                        <h5 class="mt-0" th:text="${session.user.name}"></h5>
+                <div id="reply_div">
+                    <div class="media" th:if="session.user">
+                        <img th:src="${session.user.avatarUrl}" class="mr-3" th:alt="${session.user.name}">
+                        <div class="media-body">
+                            <h5 class="mt-0" th:text="${session.user.name}"></h5>
+                        </div>
                     </div>
+                    <div class="form-group reply">
+                        <label for="reply_ques_cont">回复：</label>
+                        <textarea class="form-control" id="reply_ques_cont" rows="12" minlength="12"></textarea>
+                    </div>
+                    <button type="button" class="btn btn-info" onclick="reply_Ques()">回复</button>
                 </div>
-                <div class="form-group reply">
-                    <label for="reply_ques_cont">回复：</label>
-                    <textarea class="form-control" id="reply_ques_cont" rows="12" minlength="12"></textarea>
-                </div>
-                <button type="button" class="btn btn-info" onclick="reply_Ques()">回复</button>
-            </div>
 
         </div>
+
         <div class="col-xl-3 col-lg-12 col-md-12 col-sm-12 col-12 right_bar">
+            <h4 class="display-4">发起人</h4>
             <div class="media">
                 <img th:src="${ques.user.avatarUrl}" class="mr-3" th:alt="${ques.user.name}">
                 <div class="media-body">
                     <h5 class="mt-0" th:text="${ques.user.name}"></h5>
                 </div>
             </div>
+            <hr class="my-4">
+            <p>相关问题推荐</p>
+            <div th:each="related :${relatedQues}">
+                <a th:href="'/question/info/'+${related.id}">
+                    <div role="alert" th:class="${relatedStat.odd} ? 'alert alert-primary':'alert alert-info'" th:text="${related.title}">
+                    </div>
+                </a>
+            </div>
+
         </div>
     </div>
 </div>
@@ -199,7 +206,8 @@
         for (var i = 0; i < total; i++) {
             $(".bi-chat-div")[i].click();
         }
-    })
+    });
+
 </script>
 <script>
     function reply_Ques() {
@@ -341,6 +349,31 @@
             type: "POST",
             success: function () {
                 window.location.href = "/index";
+            }
+        })
+    });
+
+    //喜歡評論
+    $(".bi-like-div").click(function () {
+        var id = $(this).attr("data-id");
+        var like_div_svg = $("#bi-like-div-" + id + " svg");
+        var like_div_span= $("#bi-like-div-" + id + " span");
+        if (like_div_svg.attr("fill") === "blue") {
+            like_div_svg.attr("fill", "black");
+            like_div_span.text(parseInt(like_div_span.text()) - 1)
+        } else {
+            like_div_svg.attr("fill", "blue");
+            like_div_span.text(parseInt(like_div_span.text()) + 1)
+        }
+        $.ajax({
+            url: "/comment/like",
+            dataType: 'json',
+            type: 'Get',
+            data: {
+                'id': id
+            },
+            success: function (res) {
+                console.log(res)
             }
         })
     })

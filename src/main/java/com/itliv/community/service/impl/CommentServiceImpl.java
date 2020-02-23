@@ -34,8 +34,8 @@ public class CommentServiceImpl implements CommentService {
     public void insert(Comment record) {
         if (record.getType().equals(CommentTypeEnum.COMMENT.getTypeCode())) {
             //回复评论
-            Comment comment = null;
-            comment = commentMapper.selectByPrimaryKey(record.getParentId());
+            Integer parentId = record.getParentId();
+            Comment comment = commentMapper.selectByPrimaryKey(parentId);
             if (comment == null) {
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
             }
@@ -53,6 +53,23 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<CommentDTO2> findCommentByParentId(int id, int parentId) {
         return commentMapper.selectByParentId(id, parentId);
+    }
+
+    @Override
+    public void updateLike(int id, int liker) {
+        Comment record = new Comment();
+        record.setId(id);
+        Comment comment = commentMapper.selectByPrimaryKey(id);
+        if (comment.getLiker() != null && comment.getLiker().contains(liker+",")) {
+            String old = liker + ",";
+            record.setLiker(comment.getLiker().replace(old,""));
+            record.setLikeCount(-1L);
+        } else {
+            record.setLiker(liker+",");
+            record.setLikeCount(1L);
+        }
+
+        commentMapper.updateByPrimaryKeySelective(record);
     }
 
 }

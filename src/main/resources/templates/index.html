@@ -36,7 +36,8 @@
                 <li class="media my-4">
                     <img th:src="${question.user.avatarUrl}" class="mr-3" th:alt="${question.user.name}">
                     <div class="media-body">
-                        <a class="mt-0 mb-1 d-block" th:text="${question.title}" th:href="@{'/question/info/'+${question.id}}"></a>
+                        <a class="mt-0 mb-1 d-block" th:text="${question.title}"
+                           th:href="@{'/question/info/'+${question.id}}"></a>
                         <span class="info_span">
                             • <span th:text="${question.commentCount}">*</span> 个回复 • <span
                                 th:text="${question.viewCount}">*</span> 次浏览 • 时间： <span
@@ -46,29 +47,38 @@
                 </li>
             </ul>
             <!--分页导航栏-->
-            <nav aria-label="Page navigation example">
+            <nav aria-label="Page navigation example" th:unless="${lists.pages==1}">
                 <ul class="pagination justify-content-center">
-                    <li th:class="${lists.pageNum == 1} ? 'page-item disabled':'page-item '">
+                    <li class="page-item" th:unless="${lists.pageNum == 1}">
                         <a class="page-link" th:href="'/index?page=1'">首页</a>
                     </li>
-                    <li th:class="${lists.hasPreviousPage} ? 'page-item':'page-item disabled'">
-                        <a class="page-link" th:href="'/index?page='+${lists.pageNum-1}" tabindex="-1" aria-disabled="true">&lt;</a>
+                    <li class="page-item" th:if="${lists.hasPreviousPage}">
+                        <a class="page-link" th:href="'/index?page='+${lists.pageNum-1}" tabindex="-1"
+                           aria-disabled="true">&lt;</a>
                     </li>
                     <li class="page-item" th:each="pagenum : ${lists.navigatepageNums}"
                         th:class="${lists.pageNum == pagenum} ? 'page-item active' : 'page-item'">
                         <a class="page-link" th:href="'/index?page='+${pagenum}">[[${pagenum}]]</a>
                     </li>
-                    <li th:class="${lists.hasNextPage} ? 'page-item':'page-item disabled'">
+                    <li class="page-item" th:if="${lists.hasNextPage}">
                         <a class="page-link" th:href="'/index?page='+${lists.pageNum+1}">&gt;</a>
                     </li>
-                    <li th:class="${lists.pageNum == lists.pages} ? 'page-item disabled':'page-item '">
+                    <li class="page-item" th:unless="${lists.pageNum == lists.pages}">
                         <a class="page-link" th:href="'/index?page='+${lists.pages}">尾页</a>
                     </li>
                 </ul>
             </nav>
         </div>
         <div class="col-xl-3 col-lg-12 col-md-12 col-sm-12 col-12 tips">
-            <h3>指南</h3>
+            <p>热门问题推荐</p>
+            <div th:each="hotQ :${hotQues} " style="display: block">
+                <a th:href="'/question/info/'+${hotQ.id}">
+                    <div role="alert" th:class="${hotQStat.odd} ? 'alert alert-primary':'alert alert-info'"
+                         th:text="${hotQ.title}" >
+                    </div>
+
+                </a>
+            </div>
         </div>
     </div>
 

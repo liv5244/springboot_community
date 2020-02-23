@@ -1,195 +1,165 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.itliv.community.mapper.CommentMapper">
-    <resultMap id="BaseResultMap" type="com.itliv.community.model.Comment">
-        <id column="comment_id" jdbcType="INTEGER" property="id"/>
-        <result column="comment_parent_id" jdbcType="INTEGER" property="parentId"/>
-        <result column="comment_type" jdbcType="INTEGER" property="type"/>
-        <result column="comment_commentor" jdbcType="INTEGER" property="commentor"/>
-        <result column="comment_gmt_create" jdbcType="BIGINT" property="gmtCreate"/>
-        <result column="comment_gmt_modified" jdbcType="BIGINT" property="gmtModified"/>
-        <result column="comment_like_count" jdbcType="BIGINT" property="likeCount"/>
-        <result column="comment_content" jdbcType="VARCHAR" property="content"/>
-    </resultMap>
+  <resultMap id="BaseResultMap" type="com.itliv.community.model.Comment">
+    <id column="id" jdbcType="INTEGER" property="id"/>
+    <result column="comment_parent_id" jdbcType="INTEGER" property="parentId"/>
+    <result column="comment_type" jdbcType="INTEGER" property="type"/>
+    <result column="comment_commentor" jdbcType="INTEGER" property="commentor"/>
+    <result column="comment_gmt_create" jdbcType="BIGINT" property="gmtCreate"/>
+    <result column="comment_gmt_modified" jdbcType="BIGINT" property="gmtModified"/>
+    <result column="comment_like_count" jdbcType="BIGINT" property="likeCount"/>
+    <result column="comment_content" jdbcType="VARCHAR" property="content"/>
+    <result column="comment_liker" jdbcType="VARCHAR" property="liker" />
+  </resultMap>
+  <resultMap id="mapWithUser" type="com.itliv.community.dto.CommentDTO2">
+    <id column="id" jdbcType="INTEGER" property="id"/>
+    <result column="parent_id" jdbcType="INTEGER" property="parentId"/>
+    <result column="type" jdbcType="INTEGER" property="type"/>
+    <result column="commentor" jdbcType="INTEGER" property="commentor"/>
+    <result column="gmt_create" jdbcType="BIGINT" property="gmtCreate"/>
+    <result column="gmt_modified" jdbcType="BIGINT" property="gmtModified"/>
+    <result column="like_count" jdbcType="BIGINT" property="likeCount"/>
+    <result column="content" jdbcType="VARCHAR" property="content"/>
+    <result column="liker" jdbcType="VARCHAR" property="liker" />
+    <association property="user" javaType="com.itliv.community.model.User">
+      <id column="id" property="id"/>
+      <result column="name" property="name"/>
+      <result column="account_id" property="accountId"/>
+      <result column="token" property="token"/>
+      <result column="gmt_create" property="gmtCreate"/>
+      <result column="gmt_modified" property="gmtModified"/>
+      <result column="avatar_url" property="avatarUrl"/>
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List">
+    comment.id as comment_id, comment.parent_id as comment_parent_id, comment.`type` as `comment_type`, 
+    comment.commentor as comment_commentor, comment.gmt_create as comment_gmt_create, 
+    comment.gmt_modified as comment_gmt_modified, comment.like_count as comment_like_count, 
+    comment.content as comment_content, comment.liker as comment_liker
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from comment comment
+    where comment.id = #{id,jdbcType=INTEGER}
+  </select>
 
-    <resultMap id="mapWithUser" type="com.itliv.community.dto.CommentDTO2">
-        <id column="id" jdbcType="INTEGER" property="id"/>
-        <result column="parent_id" jdbcType="INTEGER" property="parentId"/>
-        <result column="type" jdbcType="INTEGER" property="type"/>
-        <result column="commentor" jdbcType="INTEGER" property="commentor"/>
-        <result column="gmt_create" jdbcType="BIGINT" property="gmtCreate"/>
-        <result column="gmt_modified" jdbcType="BIGINT" property="gmtModified"/>
-        <result column="like_count" jdbcType="BIGINT" property="likeCount"/>
-        <result column="content" jdbcType="VARCHAR" property="content"/>
-        <association property="user" javaType="com.itliv.community.model.User">
-            <id column="id" property="id"/>
-            <result column="name" property="name"/>
-            <result column="account_id" property="accountId"/>
-            <result column="token" property="token"/>
-            <result column="gmt_create" property="gmtCreate"/>
-            <result column="gmt_modified" property="gmtModified"/>
-            <result column="avatar_url" property="avatarUrl"/>
-        </association>
-    </resultMap>
-
-    <sql id="Base_Column_List">
-        comment
-        .
-        id
-        as
-        comment_id
-        ,
-        comment
-        .
-        parent_id
-        as
-        comment_parent_id,
-        comment
-        .
-        `type`
-        as
-        `comment_type`,
-        comment
-        .
-        commentor
-        as
-        comment_commentor,
-        comment
-        .
-        gmt_create
-        as
-        comment_gmt_create,
-        comment
-        .
-        gmt_modified
-        as
-        comment_gmt_modified,
-        comment
-        .
-        like_count
-        as
-        comment_like_count,
-        comment
-        .
-        content
-        as
-        comment_content
-    </sql>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from comment comment
-        where comment.id = #{id,jdbcType=INTEGER}
-    </select>
-    <select id="selectByParentId" resultMap="mapWithUser">
-        SELECT c.*, u.*
-        FROM comment c
-                 LEFT JOIN user u ON c.commentor = u.id
-        where c.parent_id = ${id}
-          and c.type = #{parentId}
-        ORDER BY c.`gmt_modified` DESC
-    </select>
-
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        delete
-        from comment
-        where id = #{id,jdbcType=INTEGER}
-    </delete>
-    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itliv.community.model.Comment"
-            useGeneratedKeys="true">
-        insert into comment (parent_id, `type`, commentor,
-                             gmt_create, gmt_modified, like_count,
-                             content)
-        values (#{parentId,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{commentor,jdbcType=INTEGER},
-                #{gmtCreate,jdbcType=BIGINT}, #{gmtModified,jdbcType=BIGINT}, #{likeCount,jdbcType=BIGINT},
-                #{content,jdbcType=VARCHAR})
-    </insert>
-    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itliv.community.model.Comment"
-            useGeneratedKeys="true">
-        insert into comment
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="parentId != null">
-                parent_id,
-            </if>
-            <if test="type != null">
-                `type`,
-            </if>
-            <if test="commentor != null">
-                commentor,
-            </if>
-            <if test="gmtCreate != null">
-                gmt_create,
-            </if>
-            <if test="gmtModified != null">
-                gmt_modified,
-            </if>
-            <if test="likeCount != null">
-                like_count,
-            </if>
-            <if test="content != null">
-                content,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="parentId != null">
-                #{parentId,jdbcType=INTEGER},
-            </if>
-            <if test="type != null">
-                #{type,jdbcType=INTEGER},
-            </if>
-            <if test="commentor != null">
-                #{commentor,jdbcType=INTEGER},
-            </if>
-            <if test="gmtCreate != null">
-                #{gmtCreate,jdbcType=BIGINT},
-            </if>
-            <if test="gmtModified != null">
-                #{gmtModified,jdbcType=BIGINT},
-            </if>
-            <if test="likeCount != null">
-                #{likeCount,jdbcType=BIGINT},
-            </if>
-            <if test="content != null">
-                #{content,jdbcType=VARCHAR},
-            </if>
-        </trim>
-    </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.itliv.community.model.Comment">
-        update comment
-        <set>
-            <if test="parentId != null">
-                parent_id = #{parentId,jdbcType=INTEGER},
-            </if>
-            <if test="type != null">
-                `type` = #{type,jdbcType=INTEGER},
-            </if>
-            <if test="commentor != null">
-                commentor = #{commentor,jdbcType=INTEGER},
-            </if>
-            <if test="gmtCreate != null">
-                gmt_create = #{gmtCreate,jdbcType=BIGINT},
-            </if>
-            <if test="gmtModified != null">
-                gmt_modified = #{gmtModified,jdbcType=BIGINT},
-            </if>
-            <if test="likeCount != null">
-                like_count = #{likeCount,jdbcType=BIGINT},
-            </if>
-            <if test="content != null">
-                content = #{content,jdbcType=VARCHAR},
-            </if>
-        </set>
-        where id = #{id,jdbcType=INTEGER}
-    </update>
-    <update id="updateByPrimaryKey" parameterType="com.itliv.community.model.Comment">
-        update comment
-        set parent_id    = #{parentId,jdbcType=INTEGER},
-            `type`       = #{type,jdbcType=INTEGER},
-            commentor    = #{commentor,jdbcType=INTEGER},
-            gmt_create   = #{gmtCreate,jdbcType=BIGINT},
-            gmt_modified = #{gmtModified,jdbcType=BIGINT},
-            like_count   = #{likeCount,jdbcType=BIGINT},
-            content       = #{content,jdbcType=VARCHAR}
-        where id = #{id,jdbcType=INTEGER}
-    </update>
+  <select id="selectByParentId" resultMap="mapWithUser">
+    SELECT c.*, u.*
+    FROM comment c
+           LEFT JOIN user u ON c.commentor = u.id
+    where c.parent_id = ${id}
+      and c.type = #{parentId}
+    ORDER BY c.`gmt_modified` DESC
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from comment
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itliv.community.model.Comment" useGeneratedKeys="true">
+    insert into comment (parent_id, `type`, commentor, 
+      gmt_create, gmt_modified, like_count, 
+      content, liker)
+    values (#{parentId,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{commentor,jdbcType=INTEGER}, 
+      #{gmtCreate,jdbcType=BIGINT}, #{gmtModified,jdbcType=BIGINT}, #{likeCount,jdbcType=BIGINT}, 
+      #{content,jdbcType=VARCHAR}, #{liker,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itliv.community.model.Comment" useGeneratedKeys="true">
+    insert into comment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="type != null">
+        `type`,
+      </if>
+      <if test="commentor != null">
+        commentor,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+      <if test="likeCount != null">
+        like_count,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="liker != null">
+        liker,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="parentId != null">
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="commentor != null">
+        #{commentor,jdbcType=INTEGER},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=BIGINT},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=BIGINT},
+      </if>
+      <if test="likeCount != null">
+        #{likeCount,jdbcType=BIGINT},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="liker != null">
+        #{liker,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.itliv.community.model.Comment">
+    update comment
+    <set>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        `type` = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="commentor != null">
+        commentor = #{commentor,jdbcType=INTEGER},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=BIGINT},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=BIGINT},
+      </if>
+      <if test="likeCount != null">
+        like_count = like_count + #{likeCount,jdbcType=BIGINT},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="liker != null">
+        liker = #{liker,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.itliv.community.model.Comment">
+    update comment
+    set parent_id = #{parentId,jdbcType=INTEGER},
+      `type` = #{type,jdbcType=INTEGER},
+      commentor = #{commentor,jdbcType=INTEGER},
+      gmt_create = #{gmtCreate,jdbcType=BIGINT},
+      gmt_modified = #{gmtModified,jdbcType=BIGINT},
+      like_count = #{likeCount,jdbcType=BIGINT},
+      content = #{content,jdbcType=VARCHAR},
+      liker = #{liker,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>

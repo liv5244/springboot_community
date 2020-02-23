@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Slf4j
 public class QuestionServiceImpl implements QuestionService {
@@ -64,5 +66,16 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public void delQuesById(int id) {
         questionMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public List<Question> findRelatedQuestions(QuestionDTO question) {
+        String tags = question.getTag().replaceAll("_","|");
+        return questionMapper.selectRelatedQuestions(question.getId(), tags);
+    }
+
+    @Override
+    public List<Question> findHotQuestions() {
+        return questionMapper.selectHotQuestions();
     }
 }
