@@ -1,6 +1,7 @@
 package com.itliv.community.controller;
 
 import com.itliv.community.dto.CommentDTO2;
+import com.itliv.community.dto.ImgDto;
 import com.itliv.community.dto.QuestionDTO;
 import com.itliv.community.enums.CommentTypeEnum;
 import com.itliv.community.exception.CustomizeErrorCode;
@@ -51,6 +52,7 @@ public class QuestionControlller {
         }
         questionService.incViewCount(id);
         model.addAttribute("ques", question);
+        model.addAttribute("self", true);
         return "question";
     }
 
@@ -59,5 +61,15 @@ public class QuestionControlller {
     public Msg delQues(@RequestParam("id") int id) {
         questionService.delQuesById(id);
         return Msg.success();
+    }
+
+    @PostMapping("/upload/img")
+    @ResponseBody
+    public ImgDto uploadImg() {
+        ImgDto imgDto = new ImgDto();
+        imgDto.setSuccess(1);
+        imgDto.setUrl("http://localhost:8080/static/images/icon.jpg");
+        imgDto.setMessage("上传失败，请上传10M以内图片");
+        return imgDto;
     }
 }

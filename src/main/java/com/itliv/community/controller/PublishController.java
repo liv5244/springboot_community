@@ -1,6 +1,7 @@
 package com.itliv.community.controller;
 
 import com.itliv.community.dto.QuestionDTO;
+import com.itliv.community.dto.Tag;
 import com.itliv.community.exception.CustomizeErrorCode;
 import com.itliv.community.exception.CustomizeException;
 import com.itliv.community.model.Question;
@@ -29,6 +30,12 @@ public class PublishController {
     @Autowired
     QuestionServiceImpl questionService;
 
+    /**
+     * 登录进入publish页
+     * @param request
+     * @param model
+     * @return
+     */
     @GetMapping("/publish")
     public String publish(HttpServletRequest request, Model model) {
         User user = (User) request.getSession().getAttribute("user");
@@ -39,9 +46,15 @@ public class PublishController {
         }
         model.addAttribute("ques", new Question());
         model.addAttribute("flag", "release");
+        model.addAttribute("tags", Tag.getTags());
         return "publish";
     }
 
+    /**
+     * 判断是发布还是修改，然后进行更新数据库操作
+     * @param request
+     * @return
+     */
     @PostMapping("/publish")
     @ResponseBody
     public Msg sendQuestion(HttpServletRequest request) {
@@ -67,6 +80,13 @@ public class PublishController {
         }
     }
 
+    /**
+     * 修改问题界面
+     * @param id
+     * @param model
+     * @param request
+     * @return
+     */
     @GetMapping("/publish/{id}")
     public String editQues(@PathVariable("id") int id, Model model,
                            HttpServletRequest request) {
@@ -82,6 +102,7 @@ public class PublishController {
 
         model.addAttribute("ques", quesById);
         model.addAttribute("flag", "edit");
+        model.addAttribute("tags", Tag.getTags());
         return "publish";
     }
 }

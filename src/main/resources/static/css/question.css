@@ -26,10 +26,10 @@ a:hover {
     font-weight: 500;
 }
 
-.left_cont {
-    border-right-color: rgba(0, 0, 0, 0.125);
-    border-right-style: solid;
-    border-right-width: 1px;
+.right_bar {
+    border-left-color: rgba(0, 0, 0, 0.125);
+    border-left-style: solid;
+    border-left-width: 1px;
 }
 
 .text_color_999 {

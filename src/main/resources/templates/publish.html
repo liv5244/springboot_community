@@ -7,17 +7,18 @@
     <link rel="stylesheet" th:href="@{/static/css/index.css}">
     <link rel="stylesheet" th:href="@{/static/css/publish.css}">
     <link rel="shortcut icon" th:href="@{/static/images/favicon.ico}" type="image/x-icon"/>
+    <link rel="stylesheet" href="/static/css/editormd.css"/>
 
     <script type="application/javascript" th:src="@{/webjars/jquery/3.4.1/jquery.js}"></script>
     <script type="application/javascript" th:src="@{/webjars/bootstrap/4.4.1/js/bootstrap.js}"></script>
-
+    <script src="/static/js/editormd.min.js"></script>
 </head>
 <body>
 <div th:replace="common/nav::nav"></div>
 
 <div class="container main">
     <div class="row">
-        <div class="col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <a href="javascript:history.go(-1);" class="option">
                 <svg class="bi bi-chevron-left" width="2em" height="2em" viewBox="0 0 20 20" fill="currentColor"
                      xmlns="http://www.w3.org/2000/svg">
@@ -49,8 +50,26 @@
                 </div>
                 <div class="form-group content">
                     <h5><label for="content">问题补充（必填，参看右侧提示）：</label></h5>
+                    <div id="test-editor">
                     <textarea class="form-control" id="content" rows="18" name="content"
-                              th:text="${ques.content == null ? '':ques.content }"></textarea>
+                              th:text="${ques.content == null ? '':ques.content }" style="display:none;">
+                    </textarea>
+                    </div>
+                    <script type="text/javascript">
+                        $(function () {
+                            var editor = editormd("test-editor", {
+                                width: "100%",
+                                height: "600px",
+                                path: "/static/lib/",
+                                watch: false,
+                                imageUpload: true,
+                                delay: 0,
+                                fontSize: "15px",
+                                imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+                                imageUploadURL: "/question/upload/img",
+                            });
+                        });
+                    </script>
                     <div class="invalid-feedback">
                         输入内容丫~
                     </div>
@@ -58,19 +77,47 @@
                 <div class="form-group tag">
                     <h5><label for="tag">添加标签：</label></h5>
                     <input type="text" class="form-control" id="tag" name="tag" placeholder="标签按照 _ 分隔开"
-                           th:value="${ques.tag == null ? '':ques.tag}">
+                           th:value="${ques.tag == null ? '':ques.tag}" disabled="disabled"
+                           style="border: none; margin-bottom: 10px">
                     <div class="valid-feedback">
                         输入格式正确
                     </div>
                     <div class="invalid-feedback">
                         输入格式错误
                     </div>
+                    <div class="row">
+                        <div class="col-3">
+                            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
+                                 aria-orientation="vertical">
+                                <a th:each="tag : ${tags}" th:text="${tag.tagCategory}"
+                                   th:class="${tagStat.index==0?'nav-link active':'nav-link'}"
+                                   th:id="'v-pills-home-tab-'+${tagStat.index}" data-toggle="pill"
+                                   th:href="'#v-pills-home-'+${tagStat.index}"
+                                   role="tab" th:aria-controls="'v-pills-home-'+${tagStat.index}"
+                                   aria-selected="true"></a>
+                            </div>
+                        </div>
+                        <div class="col-9">
+                            <div class="tab-content" id="v-pills-tabContent">
+                                <div th:each="tag : ${tags}"
+                                     th:class="${tagStat.index==0?'tab-pane fade show active':'tab-pane fade'}"
+                                     th:id="'v-pills-home-'+${tagStat.index}" role="tabpanel"
+                                     th:aria-labelledby="'v-pills-home-tab-'+${tagStat.index}">
+                                    <span th:class="${tagNameStat.odd ? 'badge badge-primary':'badge badge-success'}"
+                                          th:each="tagName : ${tag.tagName}"
+                                          th:text="${tagName}" onclick="tagChoose(this)"
+                                          th:data-tag="${tagName}">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <h5><label for="tag">选择文件：</label></h5>
-                <div class="form-group custom-file file">
-                    <input type="file" class="custom-file-input" id="uploadFile" name="files">
-                    <label class="custom-file-label" for="uploadFile">选择文件</label>
-                </div>
+                <!--<h5><label for="tag">选择文件：</label></h5>-->
+                <!--<div class="form-group custom-file file">-->
+                <!--<input type="file" class="custom-file-input" id="uploadFile" name="files">-->
+                <!--<label class="custom-file-label" for="uploadFile">选择文件</label>-->
+                <!--</div>-->
                 <div>
                     <button type="button" class="btn btn-success refer"
                             th:if="${#strings.equals('release',flag)}">发布
@@ -82,13 +129,20 @@
             </form>
 
         </div>
-        <div class="col-xl-3 col-lg-12 col-md-12 col-sm-12 col-12 tips">
-            <h3>问题发起指南:</h3>
-            <ol>
-                <li>问题标题：请用精简的语言描述您发布的问题，不超过25字。</li>
-                <li>问题补充：详细补充您的问题内容，并确保问题描述清晰直观，并提供一些相关资料。</li>
-                <li>选择标签：选择一个或者多个合适的标签，用 _ 分隔开每个标签不超过10个字。</li>
-            </ol>
+        <div role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="false">
+            <div class="toast-header">
+                <strong class="mr-auto">提示</strong>
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="toast-body">
+                <ol>
+                    <li>问题标题：请用精简的语言描述您发布的问题，不超过25字。</li>
+                    <li>问题补充：详细补充您的问题内容，并确保问题描述清晰直观，并提供一些相关资料。</li>
+                    <li>选择标签：选择一个或者多个合适的标签，用 _ 分隔开每个标签不超过10个字。</li>
+                </ol>
+            </div>
         </div>
     </div>
 
@@ -116,6 +170,7 @@
 
 <script>
     $(document).ready(function () {
+        $('.toast').toast('show');
 
         function initwindow() {
             $(".valid-feedback").hide();
@@ -155,7 +210,7 @@
             if (tag_len <= 0) {
                 $(".tag .valid-feedback").hide();
                 $(".tag .invalid-feedback").text("不能为空").show();
-            } else if (! testStr.test($("#tag").val())) {
+            } else if (!testStr.test($("#tag").val())) {
                 $(".tag .valid-feedback").hide();
                 $(".tag .invalid-feedback").text("格式错误").show();
             } else {
@@ -192,7 +247,33 @@
                 }
             });
         });
+
+
     })
+
+    //tagChoice点击按钮,实现标签的选择
+    function tagChoose(e) {
+        var newTag = e.getAttribute("data-tag");
+        var previous = $("#tag").val();
+        if (previous === "") {
+            previous = newTag;
+        } else if (previous.indexOf(newTag) === -1) {
+            previous = previous + "_" + newTag;
+        } else {
+            previous = previous.replace(newTag, "")
+            if (previous.indexOf("__") !== -1) {
+                previous = previous.replace(/__/, "_");
+            }
+
+            if (previous.substring(0, 1) === "_") {
+                previous = previous.substring(1, previous.length);
+            }
+            if (previous.substring(previous.length - 1, previous.length) === "_") {
+                previous = previous.substring(0, previous.length - 1);
+            }
+        }
+        $("#tag").val(previous);
+    }
 </script>
 </body>
 </html>

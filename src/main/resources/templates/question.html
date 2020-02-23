@@ -6,16 +6,20 @@
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.4.1/css/bootstrap.css}">
     <link rel="stylesheet" th:href="@{/static/css/question.css}">
     <link rel="shortcut icon" th:href="@{/static/images/favicon.ico}" type="image/x-icon"/>
+    <link rel="stylesheet" href="/static/css/editormd.preview.css"/>
 
     <script type="application/javascript" th:src="@{/webjars/jquery/3.4.1/jquery.js}"></script>
     <script type="application/javascript" th:src="@{/webjars/bootstrap/4.4.1/js/bootstrap.js}"></script>
+    <script src="/static/js/editormd.min.js"></script>
+    <script src="/static/lib/marked.min.js"></script>
+    <script src="/static/lib/prettify.min.js"></script>
 </head>
 <body>
 <!--引入nav  bar-->
 <div th:replace="common/nav::nav"></div>
 <div class="container main">
     <div class="row">
-        <div class="col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12 left_cont">
+        <div th:class="${self ? 'col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 left_cont' : 'col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12 left_cont'}">
             <a href="javascript:history.go(-1);" class="option">
                 <svg class="bi bi-chevron-left" width="2em" height="2em" viewBox="0 0 20 20" fill="currentColor"
                      xmlns="http://www.w3.org/2000/svg">
@@ -64,13 +68,23 @@
                 </a>
             </div>
             <hr>
-            <div th:text="${ques.content}">
-
+            <div th:each="tag : ${#strings.listSplit(ques.tag,'_')}" style="display: inline; margin-right: 10px;">
+                <span class="badge badge-pill badge-primary" th:text="${tag}"
+                      style="font-size: 15px; font-weight: normal; cursor: pointer;"></span>
             </div>
             <hr>
-            <div th:each="tag : ${#strings.listSplit(ques.tag,'_')}" style="display: inline; margin-right: 10px;">
-                <span class="badge badge-pill badge-primary" th:text="${tag}"></span>
+            <div id="test-markdown-view">
+                <textarea style="display:none;" th:text="${ques.content}"></textarea>
             </div>
+            <script type="text/javascript">
+                $(function () {
+                    var testView = editormd.markdownToHTML("test-markdown-view", {
+                        // markdown : "[TOC]\n### Hello world!\n## Heading 2", // Also, you can dynamic set Markdown text
+                        // htmlDecode : true,  // Enable / disable HTML tag encode.
+                        // htmlDecode : "style,script,iframe",  // Note: If enabled, you should filter some dangerous HTML tags for website security.
+                    });
+                });
+            </script>
             <hr>
             <h2>[[${ques.commentCount}]]个回复</h2>
             <hr>
@@ -84,7 +98,8 @@
                         <span th:text="${#dates.format(comment.gmtCreate,'yyyy-MM-dd HH:mm')}" class="time_span"></span>
                         <p class="comment_content">[[${comment.content}]]</p>
                         <div class="count_div">
-                            <div style="display: inline;" class="bi-like-div" th:data-id="${comment.id}" th:id="'bi-like-div-'+${comment.id}">
+                            <div style="display: inline;" class="bi-like-div" th:data-id="${comment.id}"
+                                 th:id="'bi-like-div-'+${comment.id}">
                                 <svg class="bi bi-heart-fill like" width="1em" height="1em" viewBox="0 0 20 20"
                                      th:fill="${comment.liker==null || session.user==null ? 'black':(#strings.contains(comment.liker,session.user.id+',') ? 'blue':'black' )  }"
                                      xmlns="http://www.w3.org/2000/svg" th:id="'bi-like-'+${comment.id}">
@@ -143,23 +158,23 @@
                 </div>
                 <hr>
             </div>
-                <div id="reply_div">
-                    <div class="media" th:if="session.user">
-                        <img th:src="${session.user.avatarUrl}" class="mr-3" th:alt="${session.user.name}">
-                        <div class="media-body">
-                            <h5 class="mt-0" th:text="${session.user.name}"></h5>
-                        </div>
+            <div id="reply_div" th:unless="${self}">
+                <div class="media" th:if="session.user">
+                    <img th:src="${session.user.avatarUrl}" class="mr-3" th:alt="${session.user.name}">
+                    <div class="media-body">
+                        <h5 class="mt-0" th:text="${session.user.name}"></h5>
                     </div>
-                    <div class="form-group reply">
-                        <label for="reply_ques_cont">回复：</label>
-                        <textarea class="form-control" id="reply_ques_cont" rows="12" minlength="12"></textarea>
-                    </div>
-                    <button type="button" class="btn btn-info" onclick="reply_Ques()">回复</button>
                 </div>
+                <div class="form-group reply">
+                    <label for="reply_ques_cont">回复：</label>
+                    <textarea class="form-control" id="reply_ques_cont" rows="12" minlength="12"></textarea>
+                </div>
+                <button type="button" class="btn btn-info" onclick="reply_Ques()">回复</button>
+            </div>
 
         </div>
 
-        <div class="col-xl-3 col-lg-12 col-md-12 col-sm-12 col-12 right_bar">
+        <div class="col-xl-3 col-lg-12 col-md-12 col-sm-12 col-12 right_bar" th:unless="${self}">
             <h4 class="display-4">发起人</h4>
             <div class="media">
                 <img th:src="${ques.user.avatarUrl}" class="mr-3" th:alt="${ques.user.name}">
@@ -171,7 +186,8 @@
             <p>相关问题推荐</p>
             <div th:each="related :${relatedQues}">
                 <a th:href="'/question/info/'+${related.id}">
-                    <div role="alert" th:class="${relatedStat.odd} ? 'alert alert-primary':'alert alert-info'" th:text="${related.title}">
+                    <div role="alert" th:class="${relatedStat.odd} ? 'alert alert-primary':'alert alert-info'"
+                         th:text="${related.title}">
                     </div>
                 </a>
             </div>
@@ -357,7 +373,7 @@
     $(".bi-like-div").click(function () {
         var id = $(this).attr("data-id");
         var like_div_svg = $("#bi-like-div-" + id + " svg");
-        var like_div_span= $("#bi-like-div-" + id + " span");
+        var like_div_span = $("#bi-like-div-" + id + " span");
         if (like_div_svg.attr("fill") === "blue") {
             like_div_svg.attr("fill", "black");
             like_div_span.text(parseInt(like_div_span.text()) - 1)
