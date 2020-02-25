@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itliv.community.mapper.NotificationMapper">
+    <resultMap id="BaseResultMap" type="com.itliv.community.model.Notification">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="notifier" jdbcType="INTEGER" property="notifier"/>
+        <result column="receiver" jdbcType="INTEGER" property="receiver"/>
+        <result column="outerId" jdbcType="INTEGER" property="outerid"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="gmt_create" jdbcType="BIGINT" property="gmtCreate"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+    </resultMap>
+    <resultMap id="mapWithQuestion" type="com.itliv.community.dto.NotificationDTO">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="notifier" jdbcType="INTEGER" property="notifier"/>
+        <result column="receiver" jdbcType="INTEGER" property="receiver"/>
+        <result column="outerId" jdbcType="INTEGER" property="outerid"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="gmt_create" jdbcType="BIGINT" property="gmtCreate"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="name" jdbcType="INTEGER" property="name"/>
+        <result column="ques_name" property="quesName"/>
+        <result column="ques_gmt_create" property="quesGmtCreate"/>
+        <result column="com_gmt_create" property="comGmtCreate"/>
+        <result column="comment_name" property="commentName"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id
+        ,
+        notifier,
+        receiver,
+        outerId,
+        `type`,
+        gmt_create,
+        `status`
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from notification
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectByReceiver" resultMap="mapWithQuestion">
+        select n.*,u.name,q.title ques_name,q.gmt_create ques_gmt_create,c.content comment_name,c.gmt_create com_gmt_create
+        from ((notification n
+            LEFT join user u on n.notifier = u.id)
+            LEFT join question q on n.outerId = q.id)
+                 left join comment c on n.outerId = c.id
+        where n.receiver = #{receiverId} and status = #{status}
+    </select>
+    <select id="selectCountByReceiverId" resultType="java.lang.Integer">
+        select count(*)
+        from notification n
+        where n.receiver = #{receiverId} and status = 0
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from notification
+        where id = #{id,jdbcType=INTEGER}
+          and status = 0
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itliv.community.model.Notification"
+            useGeneratedKeys="true">
+        insert into notification (notifier, receiver, outerId,
+                                  `type`, gmt_create, `status`)
+        values (#{notifier,jdbcType=INTEGER}, #{receiver,jdbcType=INTEGER}, #{outerid,jdbcType=INTEGER},
+                #{type,jdbcType=INTEGER}, #{gmtCreate,jdbcType=BIGINT}, #{status,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itliv.community.model.Notification"
+            useGeneratedKeys="true">
+        insert into notification
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="notifier != null">
+                notifier,
+            </if>
+            <if test="receiver != null">
+                receiver,
+            </if>
+            <if test="outerid != null">
+                outerId,
+            </if>
+            <if test="type != null">
+                `type`,
+            </if>
+            <if test="gmtCreate != null">
+                gmt_create,
+            </if>
+            <if test="status != null">
+                `status`,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="notifier != null">
+                #{notifier,jdbcType=INTEGER},
+            </if>
+            <if test="receiver != null">
+                #{receiver,jdbcType=INTEGER},
+            </if>
+            <if test="outerid != null">
+                #{outerid,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=BIGINT},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.itliv.community.model.Notification">
+        update notification
+        <set>
+            <if test="notifier != null">
+                notifier = #{notifier,jdbcType=INTEGER},
+            </if>
+            <if test="receiver != null">
+                receiver = #{receiver,jdbcType=INTEGER},
+            </if>
+            <if test="outerid != null">
+                outerId = #{outerid,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                `type` = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="gmtCreate != null">
+                gmt_create = #{gmtCreate,jdbcType=BIGINT},
+            </if>
+            <if test="status != null">
+                `status` = #{status,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.itliv.community.model.Notification">
+        update notification
+        set notifier   = #{notifier,jdbcType=INTEGER},
+            receiver   = #{receiver,jdbcType=INTEGER},
+            outerId    = #{outerid,jdbcType=INTEGER},
+            `type`     = #{type,jdbcType=INTEGER},
+            gmt_create = #{gmtCreate,jdbcType=BIGINT},
+            `status`   = #{status,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

@@ -6,6 +6,7 @@ import com.itliv.community.exception.CustomizeErrorCode;
 import com.itliv.community.exception.CustomizeException;
 import com.itliv.community.model.Question;
 import com.itliv.community.model.User;
+import com.itliv.community.service.impl.NotificationServiceImpl;
 import com.itliv.community.service.impl.QuestionServiceImpl;
 import com.itliv.community.service.impl.UserServiceImpl;
 import com.itliv.community.utils.Msg;
@@ -29,9 +30,12 @@ public class PublishController {
     UserServiceImpl userService;
     @Autowired
     QuestionServiceImpl questionService;
+    @Autowired
+    NotificationServiceImpl notificationService;
 
     /**
      * 登录进入publish页
+     *
      * @param request
      * @param model
      * @return
@@ -39,19 +43,26 @@ public class PublishController {
     @GetMapping("/publish")
     public String publish(HttpServletRequest request, Model model) {
         User user = (User) request.getSession().getAttribute("user");
+        Integer receiverId = null;
         if (user != null) {
             Date now = new Date();
             log.info(user.getName() + "在时间：" + now +
                     "登陆了publish页....");
+            receiverId = user.getId();
         }
         model.addAttribute("ques", new Question());
         model.addAttribute("flag", "release");
         model.addAttribute("tags", Tag.getTags());
+        if (receiverId != null) {
+            int unreadCount = notificationService.selectCountByReceiverId(receiverId);
+            model.addAttribute("unreadCount", unreadCount);
+        }
         return "publish";
     }
 
     /**
      * 判断是发布还是修改，然后进行更新数据库操作
+     *
      * @param request
      * @return
      */
@@ -82,6 +93,7 @@ public class PublishController {
 
     /**
      * 修改问题界面
+     *
      * @param id
      * @param model
      * @param request
@@ -103,6 +115,11 @@ public class PublishController {
         model.addAttribute("ques", quesById);
         model.addAttribute("flag", "edit");
         model.addAttribute("tags", Tag.getTags());
+        if (user.getId() != null) {
+            int unreadCount = notificationService.selectCountByReceiverId(user.getId());
+            model.addAttribute("unreadCount",unreadCount);
+        }
+
         return "publish";
     }
 }

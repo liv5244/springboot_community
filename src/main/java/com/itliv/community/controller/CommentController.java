@@ -1,6 +1,5 @@
 package com.itliv.community.controller;
 
-import com.itliv.community.dto.CommentCountDTO;
 import com.itliv.community.dto.CommentDTO;
 import com.itliv.community.dto.CommentDTO2;
 import com.itliv.community.enums.CommentTypeEnum;

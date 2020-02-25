@@ -3,11 +3,15 @@ package com.itliv.community.service.impl;
 import com.itliv.community.dto.CommentCountDTO;
 import com.itliv.community.dto.CommentDTO2;
 import com.itliv.community.enums.CommentTypeEnum;
+import com.itliv.community.enums.NotificationEnum;
+import com.itliv.community.enums.NotificationStatusEnum;
 import com.itliv.community.exception.CustomizeErrorCode;
 import com.itliv.community.exception.CustomizeException;
 import com.itliv.community.mapper.CommentMapper;
+import com.itliv.community.mapper.NotificationMapper;
 import com.itliv.community.mapper.QuestionMapper;
 import com.itliv.community.model.Comment;
+import com.itliv.community.model.Notification;
 import com.itliv.community.model.Question;
 import com.itliv.community.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +30,9 @@ public class CommentServiceImpl implements CommentService {
     QuestionMapper questionMapper;
 
     @Autowired
+    NotificationMapper notificationMapper;
+
+    @Autowired
     QuestionServiceImpl questionService;
 
     @Override
@@ -39,13 +46,20 @@ public class CommentServiceImpl implements CommentService {
             if (comment == null) {
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
             }
+            //通知
+            notificationMapper.insert(new Notification(null,record.getCommentor(),comment.getCommentor(),parentId,
+                    NotificationEnum.REPLY_COMEMNTS.getType(),System.currentTimeMillis(), NotificationStatusEnum.NOREAD.getStatus()));
         } else {
             //回复问题
             Question question = questionMapper.selectByPrimaryKey(record.getParentId());
             if (question == null) {
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
+            //增肌评论数
             questionService.incCommentCount(record.getParentId());
+            //通知
+            notificationMapper.insert(new Notification(null,record.getCommentor(),question.getCreator(),question.getId(),
+                    NotificationEnum.REPLY_QUESTIONS.getType(),System.currentTimeMillis(), NotificationStatusEnum.NOREAD.getStatus()));
         }
         commentMapper.insert(record);
     }
@@ -70,6 +84,11 @@ public class CommentServiceImpl implements CommentService {
         }
 
         commentMapper.updateByPrimaryKeySelective(record);
+    }
+
+    @Override
+    public Comment findCommentById(int id) {
+        return commentMapper.selectByPrimaryKey(id);
     }
 
 }

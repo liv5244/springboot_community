@@ -10,7 +10,8 @@ public enum CustomizeErrorCode implements ICustomizeErrorCode {
     TARGET_PARAM_NOT_FOUND(404,"未选中任何问题不能进行回复"),
     //说明回复既不是对于问题的回复   也不是回复的评论，，，参数是错误的
     TYPE_PARAM_WRONG(404, "回复类型的请求参数出错，请核对后再次尝试~~"),
-    COMMENT_NOT_FOUND(404, "您回复的问题不存在~可能被删除或者参数输入有误，请核对后再操作~");
+    COMMENT_NOT_FOUND(404, "您回复的问题不存在~可能被删除或者参数输入有误，请核对后再操作~"),
+    FILE_UPLOAD_FAIL(406, "上传文件出现错误，请重新上传");
 
     private String message;
     private Integer code;

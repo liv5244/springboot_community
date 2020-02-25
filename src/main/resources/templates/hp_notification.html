@@ -27,47 +27,49 @@
                           d="M3.5 9a.5.5 0 01.5-.5h1a.5.5 0 01.5.5v1a.5.5 0 01-.5.5H4a.5.5 0 01-.5-.5V9zM4 9h1v1H4V9zm0 3.5a.5.5 0 00-.5.5v1a.5.5 0 00.5.5h1a.5.5 0 00.5-.5v-1a.5.5 0 00-.5-.5H4zm1 .5H4v1h1v-1z"
                           clip-rule="evenodd"></path>
                 </svg>
-                我的问题
+                回复我的
             </h2>
-            <hr>
-            <ul class="list-unstyled" th:each="question : ${lists.list}">
+            <!--列表页-->
+            <ul class="list-unstyled" th:each="note : ${notifications.list}">
                 <li class="media my-4">
-                    <img th:src="${question.user.avatarUrl}" class="mr-3" th:alt="${question.user.name}">
-                    <div class="media-body">
-                        <a class="mt-0 mb-1 d-block" th:text="${question.title}" th:href="@{'/question/my/info/'+${question.id}}"></a>
-                        <span class="info_span">
-                            • <span th:text="${question.commentCount}">*</span> 个回复 • <span
-                                th:text="${question.viewCount}">*</span> 次浏览 • 时间： <span
-                                th:text="${#dates.format(question.gmtCreate, 'yyyy-MM-dd HH:mm')}">*</span>
-                        </span>
+                    <div class="alert alert-light" role="alert">
+                        [[${note.name}]] 回复了您的<span th:text="${note.type == 1?'问题':'评论'}"></span>：
+                        <a th:href="${note.type == 1 ? '/homepage/notification/2ques?id='+note.id+'&dirQ='+note.outerid
+                            :'/homepage/notification/2com?id='+note.id+'&dirC='+note.outerid}"
+                           class="alert-link" th:text="${note.type == 1? note.quesName : note.commentName}">
+
+                        </a>
                     </div>
                 </li>
             </ul>
 
             <!--分页导航栏-->
-            <nav aria-label="Page navigation example" th:unless="${lists.pages==1}">
+            <nav aria-label="Page navigation example" th:unless="${notifications.pages==1}">
                 <ul class="pagination justify-content-center">
-                    <li class="page-item" th:unless="${lists.pageNum == 1}">
-                        <a class="page-link" th:href="'/homepage?page=1'">首页</a>
+                    <li class="page-item" th:unless="${notifications.pageNum == 1}">
+                        <a class="page-link" th:href="'/homepage/notification?page=1'">首页</a>
                     </li>
-                    <li class="page-item" th:if="${lists.hasPreviousPage}">
-                        <a class="page-link" th:href="'/homepage?page='+${lists.pageNum-1}" tabindex="-1" aria-disabled="true">&lt;</a>
+                    <li class="page-item" th:if="${notifications.hasPreviousPage}">
+                        <a class="page-link" th:href="'/homepage/notification?page='+${notifications.pageNum-1}"
+                           tabindex="-1"
+                           aria-disabled="true">&lt;</a>
                     </li>
-                    <li class="page-item" th:each="pagenum : ${lists.navigatepageNums}"
-                        th:class="${lists.pageNum == pagenum} ? 'page-item active' : 'page-item'">
-                        <a class="page-link" th:href="'/homepage?page='+${pagenum}">[[${pagenum}]]</a>
+                    <li class="page-item" th:each="pagenum : ${notifications.navigatepageNums}"
+                        th:class="${notifications.pageNum == pagenum} ? 'page-item active' : 'page-item'">
+                        <a class="page-link" th:href="'/homepage/notification?page='+${pagenum}">[[${pagenum}]]</a>
                     </li>
-                    <li class="page-item" th:if="${lists.hasNextPage}">
-                        <a class="page-link" th:href="'/homepage?page='+${lists.pageNum+1}">&gt;</a>
+                    <li class="page-item" th:if="${notifications.hasNextPage}">
+                        <a class="page-link"
+                           th:href="'/homepage/notification?page='+${notifications.pageNum+1}">&gt;</a>
                     </li>
-                    <li class="page-item" th:unless="${lists.pageNum == lists.pages}">
-                        <a class="page-link" th:href="'/homepage?page='+${lists.pages}">尾页</a>
+                    <li class="page-item" th:unless="${notifications.pageNum == notifications.pages}">
+                        <a class="page-link" th:href="'/homepage/notification?page='+${notifications.pages}">尾页</a>
                     </li>
                 </ul>
             </nav>
         </div>
         <div class="col-xl-3 col-lg-12 col-md-12 col-sm-12 col-12 right_bar">
-            <div th:replace="common/nav::#navs(quesCount= ${lists.getTotal()}, activeUri='pub_ques')"></div>
+            <div th:replace="common/nav::#navs(unreadCount= ${unreadCount},quesCount=${quesCount}, activeUri='notification')"></div>
         </div>
     </div>
 </div>
