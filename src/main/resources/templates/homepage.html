@@ -60,7 +60,7 @@
                     <li class="page-item" th:if="${lists.hasNextPage}">
                         <a class="page-link" th:href="'/homepage?page='+${lists.pageNum+1}">&gt;</a>
                     </li>
-                    <li class="page-item" th:unless="${lists.pageNum == lists.pages}">
+                    <li class="page-item" th:unless="${lists.pageNum == lists.pages || lists.total == 0}">
                         <a class="page-link" th:href="'/homepage?page='+${lists.pages}">尾页</a>
                     </li>
                 </ul>

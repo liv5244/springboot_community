@@ -62,7 +62,7 @@
                         <a class="page-link"
                            th:href="'/homepage/notification?page='+${notifications.pageNum+1}">&gt;</a>
                     </li>
-                    <li class="page-item" th:unless="${notifications.pageNum == notifications.pages}">
+                    <li class="page-item" th:unless="${notifications.pageNum == notifications.pages || notifications.total == 0}">
                         <a class="page-link" th:href="'/homepage/notification?page='+${notifications.pages}">尾页</a>
                     </li>
                 </ul>
